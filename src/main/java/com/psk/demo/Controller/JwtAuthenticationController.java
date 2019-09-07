@@ -16,8 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
+import static com.psk.demo.Security.SecurityConstants.TOKEN_PREFIX;
+
 @RestController
 @CrossOrigin
+@RequestMapping("/api/user")
 public class JwtAuthenticationController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -38,6 +43,16 @@ public class JwtAuthenticationController {
 		final String token = jwtTokenUtil.generateToken(userDetails);
 
 		return ResponseEntity.ok(new JwtResponse(token));
+	}
+
+	@RequestMapping(value = "/refresh", method = RequestMethod.GET)
+	public ResponseEntity<?> refreshAuthenticationToken(HttpServletRequest request) throws Exception {
+		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+
+		UserDetails userDetails = userDetailsService.loadUserByUsername(jwtTokenUtil.getUsernameFromToken(token));
+		String newToken = jwtTokenUtil.generateToken(userDetails);
+
+		return ResponseEntity.ok(new JwtResponse(newToken));
 	}
 
 	private void authenticate(String username, String password) throws Exception {

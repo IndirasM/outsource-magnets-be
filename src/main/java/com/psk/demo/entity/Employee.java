@@ -32,8 +32,7 @@ public class Employee implements UserDetails {
 	@JoinColumn(name = "main_office", nullable = false)
 	private Office office;
 
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "permission_employee",
 			joinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "employee_id"),
 			inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "permission_id"))
