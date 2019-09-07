@@ -3,6 +3,8 @@ package com.psk.demo.Service;
 import com.psk.demo.Repository.IEmployeeRepository;
 import com.psk.demo.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,4 +29,10 @@ public class EmployeeService implements IEmployeeService {
 		return repository.findById(id);
 	}
 
+	@Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		List<Employee> employees = repository.findByEmail(email);
+
+		return employees.get(0);
+	}
 }

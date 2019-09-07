@@ -1,12 +1,14 @@
 package com.psk.demo.entity;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
 @Table(name = "permission")
-public class Permission {
+public class Permission implements GrantedAuthority {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "permission_id")
@@ -35,6 +37,15 @@ public class Permission {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	//endregion
+
+	//region GrantedAuthority
+
+	@Override
+	public String getAuthority() {
+		return this.name;
 	}
 
 	//endregion

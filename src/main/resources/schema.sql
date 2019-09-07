@@ -12,7 +12,7 @@ CREATE TABLE employee
 	employee_id BIGINT IDENTITY (1,1) PRIMARY KEY,
 	full_name   VARCHAR(50)     NOT NULL,
 	email       VARCHAR(100)    NOT NULL,
-	password    VARCHAR(50)     NOT NULL,
+	password    VARCHAR(200)     NOT NULL,
 	main_office BIGINT          NOT NULL,
 	constraint fk_main_office foreign key (main_office) references office (office_id)
 );
