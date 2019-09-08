@@ -75,11 +75,11 @@ public class EmployeeController
 		return response;
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<EmployeeModel> getDetails(HttpServletRequest request) throws Exception {
+	@RequestMapping(method = RequestMethod.GET)
+	public EmployeeModel getDetails(HttpServletRequest request) throws Exception {
 		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
 		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
 
-		return ResponseEntity.ok(new EmployeeModel(employee));
+		return new EmployeeModel(employee);
 	}
 }

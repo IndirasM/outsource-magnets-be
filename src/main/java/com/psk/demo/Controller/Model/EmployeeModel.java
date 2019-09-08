@@ -7,10 +7,10 @@ import com.psk.demo.Entity.Permission;
 import java.util.Set;
 
 public class EmployeeModel {
-	private Long id;
-	private String name;
-	private String email;
-	private String office;
+	public Long id;
+	public String name;
+	public String email;
+	public String office;
 
 	public EmployeeModel(Employee employee){
 		this.id = employee.getId();

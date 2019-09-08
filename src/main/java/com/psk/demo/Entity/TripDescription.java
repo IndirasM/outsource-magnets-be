@@ -33,6 +33,10 @@ public class TripDescription {
 	@JoinColumn(name = "office_id", nullable = false)
 	private Office destination;
 
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "checklist_id", nullable = true)
+	private Checklist checklist;
+
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "employee_trip",
@@ -70,6 +74,10 @@ public class TripDescription {
 		return this.destination;
 	}
 
+	public Checklist getChecklist() {
+		return this.checklist;
+	}
+
 	public Set<Employee> getEmployees() {
 		return this.employees;
 	}
@@ -104,6 +112,10 @@ public class TripDescription {
 
 	public void setDestination(Office destination) {
 		this.destination = destination;
+	}
+
+	public void setChecklist(Checklist checklist) {
+		this.checklist = checklist;
 	}
 
 	public void setEmployees(Set<Employee> employees) {

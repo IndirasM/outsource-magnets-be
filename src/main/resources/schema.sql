@@ -85,9 +85,11 @@ CREATE TABLE trip
 	name                   VARCHAR(50) NOT NULL,
 	date_from              VARCHAR(50) NOT NULL,
 	date_to                VARCHAR(50) NOT NULL,
-	office_id            BIGINT NOT NULL,
+	office_id              BIGINT NOT NULL,
+	checklist_id               BIGINT,
 	constraint fk_trip_created_by foreign key (created_by) references employee (employee_id),
-	constraint fk_trip_office_id foreign key (office_id) references office (office_id)
+	constraint fk_trip_office_id foreign key (office_id) references office (office_id),
+	constraint fk_trip_checklist_id foreign key (checklist_id) references checklist (checklist_id)
 );
 
 IF object_id('employee_trip') is null
@@ -98,15 +100,13 @@ CREATE TABLE employee_trip
 	trip_id                    BIGINT NOT NULL,
 	is_approved                BIT DEFAULT NULL,
 	apartment_id               BIGINT,
-	hotel_id     BIGINT,
+	hotel_id                   BIGINT,
 	transport_id               BIGINT,
 	ticket_id                  BIGINT,
-	checklist_id               BIGINT,
 	constraint fk_et_employee_id foreign key (employee_id) references employee (employee_id),
 	constraint fk_et_trip_id foreign key (trip_id) references trip (trip_id),
 	constraint fk_et_apartment_id foreign key (apartment_id) references apartment (apartment_id),
 	constraint fk_et_hotel_id foreign key (hotel_id) references hotel (hotel_id),
 	constraint fk_et_transport_id foreign key (transport_id) references transport (transport_id),
-	constraint fk_et_ticket_id foreign key (ticket_id) references ticket (ticket_id),
-	constraint fk_et_checklist_id foreign key (checklist_id) references checklist (checklist_id)
+	constraint fk_et_ticket_id foreign key (ticket_id) references ticket (ticket_id)
 );

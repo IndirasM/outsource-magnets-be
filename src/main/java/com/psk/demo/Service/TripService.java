@@ -70,4 +70,8 @@ public class TripService implements ITripService {
 		trip.setIsApproved(value);
 		return tripRepository.save(trip);
 	}
+
+	public Trip findById(long id) {
+		return tripRepository.findAllById(id).get(0);
+	}
 }

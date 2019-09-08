@@ -14,6 +14,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebSecurity
@@ -47,10 +51,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable()
-				.authorizeRequests().antMatchers("/api/user/authenticate", "/test").permitAll();
-				//.anyRequest().authenticated().and()
-				//.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
-				//.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.authorizeRequests().antMatchers("/api/user/authenticate", "/test").permitAll()
+				.anyRequest().authenticated().and()
+				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+		.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
 
 		httpSecurity.addFilterBefore(tokenRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}

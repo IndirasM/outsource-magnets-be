@@ -38,10 +38,6 @@ public class Trip {
 	@JoinColumn(name = "transport_id", nullable = true)
 	private Transport transport;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "checklist_id", nullable = true)
-	private Checklist checklist;
-
 	//region getters
 
 	public Long getId() {
@@ -74,10 +70,6 @@ public class Trip {
 
 	public Transport getTransport() {
 		return this.transport;
-	}
-
-	public Checklist getChecklist() {
-		return this.checklist;
 	}
 
 	//endregion
@@ -114,10 +106,6 @@ public class Trip {
 
 	public void setTransport(Transport transport) {
 		this.transport = transport;
-	}
-
-	public void setChecklist(Checklist checklist) {
-		this.checklist = checklist;
 	}
 
 	//endregion

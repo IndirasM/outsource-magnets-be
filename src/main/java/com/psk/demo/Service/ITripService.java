@@ -11,4 +11,5 @@ public interface ITripService {
 	List<Trip> findAll();
 	List<TripDescription> findByNameStartingWith(String fragment);
 	Trip setApproved(long id, boolean value);
+	Trip findById(long id);
 }

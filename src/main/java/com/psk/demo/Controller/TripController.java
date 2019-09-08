@@ -9,6 +9,7 @@ import com.psk.demo.Service.ITripService;
 import com.psk.demo.Entity.TripDescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,11 +64,28 @@ public class TripController {
 	}
 
 	@RequestMapping(value = "/approve/{idString}", method = RequestMethod.POST)
-	public ResponseEntity<?> approveTrip(@PathVariable String idString, @RequestBody ApproveModel body)
+	public ResponseEntity<?> approveTrip(HttpServletRequest request, @PathVariable String idString, @RequestBody ApproveModel body)
 	{
 		long id = Long.parseLong(idString);
-		Trip trip = tripService.setApproved(id, body.value);
+		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+		String email = tokenUtil.getUsernameFromToken(token);
+		Employee owner = employeeService.findByEmail(email);
+		Trip trip = tripService.findById(id);
+		if (!trip.getEmployee().getId().equals(owner.getId()) || trip.getIsApproved() != null)
+			throw new AuthorizationServiceException("Unauthorized");
 
-		return ResponseEntity.ok(new TripDescriptionModel(trip));
+		Trip resultTrip = tripService.setApproved(id, body.value);
+
+		return ResponseEntity.ok(new TripDescriptionModel(resultTrip));
 	}
+
+//	@RequestMapping(value = "/", method = RequestMethod.POST)
+//	public ResponseEntity<?> approveTrip(HttpServletRequest request, @RequestBody TripCreationModel body)
+//	{
+//		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+//		String email = tokenUtil.getUsernameFromToken(token);
+//		Employee owner = employeeService.findByEmail(email);
+//
+//		TripDescription tripdescription =
+//	}
 }
