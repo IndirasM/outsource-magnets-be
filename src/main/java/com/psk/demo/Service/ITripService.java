@@ -9,4 +9,6 @@ public interface ITripService {
 	List<Trip> getApprovedTripsByUserName(String username);
 	List<Trip> getUnapprovedTripsByUserName(String username);
 	List<Trip> findAll();
+	List<TripDescription> findByNameStartingWith(String fragment);
+	Trip setApproved(long id, boolean value);
 }

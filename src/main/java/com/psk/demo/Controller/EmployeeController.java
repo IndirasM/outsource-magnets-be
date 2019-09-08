@@ -19,7 +19,7 @@ import java.util.List;
 import static com.psk.demo.Security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/employee")
 public class EmployeeController
 {
 	@Autowired
@@ -37,21 +37,21 @@ public class EmployeeController
 		return passwordEncoder.encode(string);
 	}
 
-	@RequestMapping("/employee/{id:[0-9]+}")
+	@RequestMapping("/{id:[0-9]+}")
 	public Employee getEmployee(@PathVariable String id)
 	{
 		Long parsedId = Long.parseLong(id, 10);
 		return employeeService.findById(parsedId).orElseThrow(ResourceNotFoundException::new);
 	}
 
-	@RequestMapping("/employee-by-email/{email}")
+	@RequestMapping("/by-email/{email}")
 	public UserDetails getEmployeeByUsername(@PathVariable String email)
 	{
 		return employeeService.loadUserByUsername(email);
 	}
 
-	@RequestMapping(value = "/employee/search/{fragment}", method = RequestMethod.GET)
-	public List<EmployeeInfo> getEmployeeBySearch(@PathVariable String fragment)
+	@RequestMapping(value = "/search/{fragment}", method = RequestMethod.GET)
+	public List<EmployeeInfo> getEmployeesBySearch(@PathVariable String fragment)
 	{
 		List<Employee> employees = employeeService.findByNameStartingWith(fragment);
 		List<EmployeeInfo> response = new ArrayList<>();
@@ -62,7 +62,7 @@ public class EmployeeController
 		return response;
 	}
 
-	@RequestMapping(value = "/employee/by-trip-description/{idString}", method = RequestMethod.GET)
+	@RequestMapping(value = "/by-trip-description/{idString}", method = RequestMethod.GET)
 	public List<EmployeeInfo> getEmployeeByTripId(@PathVariable String idString)
 	{
 		Long id = Long.parseLong(idString);

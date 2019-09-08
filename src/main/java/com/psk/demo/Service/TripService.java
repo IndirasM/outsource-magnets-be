@@ -1,7 +1,10 @@
 package com.psk.demo.Service;
 
 import com.psk.demo.Entity.Trip;
+import com.psk.demo.Entity.TripDescription;
+import com.psk.demo.Exception.ResourceNotFoundException;
 import com.psk.demo.Helper.DateHelper;
+import com.psk.demo.Repository.ITripDescriptionRepository;
 import com.psk.demo.Repository.ITripRepository;
 import com.psk.demo.Entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ public class TripService implements ITripService {
 	@Autowired
 	private IEmployeeService employeeService;
 
+	@Autowired
+	private ITripDescriptionRepository tripDescriptionRepository;
 
 	@Override
 	public List<Trip> getApprovedTripsByUserName(String username) {
@@ -54,5 +59,15 @@ public class TripService implements ITripService {
 	@Override
 	public List<Trip> findAll() {
 		return tripRepository.findAll();
+	}
+
+	public List<TripDescription> findByNameStartingWith(String fragment) {
+		return tripDescriptionRepository.findByNameStartingWith(fragment);
+	}
+
+	public Trip setApproved(long id, boolean value) {
+		Trip trip = tripRepository.findAllById(id).get(0);
+		trip.setIsApproved(value);
+		return tripRepository.save(trip);
 	}
 }
