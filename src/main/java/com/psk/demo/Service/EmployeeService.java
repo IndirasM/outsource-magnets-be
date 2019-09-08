@@ -1,5 +1,6 @@
 package com.psk.demo.Service;
 
+import com.psk.demo.Entity.Trip;
 import com.psk.demo.Repository.IEmployeeRepository;
 import com.psk.demo.Entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +32,13 @@ public class EmployeeService implements IEmployeeService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		List<Employee> employees = repository.findByEmail(email);
+		Employee employee = repository.findByEmail(email);
 
-		return employees.get(0);
+		return employee;
 	}
 
 	public Employee loadUserByEmail(String email) throws UsernameNotFoundException {
-		List<Employee> employees = repository.findByEmail(email);
-
-		return employees.get(0);
+		Employee employee = repository.findByEmail(email);
+		return employee;
 	}
 }

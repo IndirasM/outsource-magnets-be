@@ -7,5 +7,5 @@ import com.psk.demo.Entity.Employee;
 import java.util.List;
 
 public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
-	List<Employee> findByEmail(String email);
+	Employee findByEmail(String email);
 }

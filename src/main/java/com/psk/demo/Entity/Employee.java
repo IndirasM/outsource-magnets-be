@@ -37,8 +37,8 @@ public class Employee implements UserDetails {
 			inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "permission_id"))
 	private Set<Permission> permissions;
 
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+	//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
 	private Set<Trip> trips;
 
 	//region getters

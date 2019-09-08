@@ -14,7 +14,8 @@ public class Trip {
 	@JoinColumn(name = "trip_id")
 	private TripDescription tripDescription;
 
-	@Column(name = "employee_id")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "employee_id")
 	private Employee employee;
 
 	@Column(name = "is_approved", nullable = true)

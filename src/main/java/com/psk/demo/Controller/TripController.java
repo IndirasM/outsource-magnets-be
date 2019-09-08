@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.psk.demo.Security.SecurityConstants.TOKEN_PREFIX;
@@ -29,15 +30,26 @@ public class TripController {
 	@Autowired
 	private IEmployeeService employeeService;
 
-//	@Autowired
-//	private ITripService tripService;
-//
-//	@RequestMapping(value = "/", method = RequestMethod.GET)
-//	public ResponseEntity<TripDescriptionsByUserModel> getTripDescriptionsByUserModel(HttpServletRequest request) throws Exception {
-//		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
-//
-//		List<Trip> trips = tripService.getApprovedTripsByUserName(tokenUtil.getUsernameFromToken(token));
-//		List<TripDescriptionModel> approvedDescriptions = trips.forEach();
-//		return ResponseEntity.ok(new JwtResponse(newToken));
-//	}
+	@Autowired
+	private ITripService tripService;
+
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ResponseEntity<TripDescriptionsByUserModel> getTripDescriptionsByUserModel(HttpServletRequest request) throws Exception {
+		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+
+		List<Trip> approvedTrips = tripService.getApprovedTripsByUserName(tokenUtil.getUsernameFromToken(token));
+		List<Trip> unapprovedTrips = tripService.getUnapprovedTripsByUserName(tokenUtil.getUsernameFromToken(token));
+
+		List<TripDescriptionModel> approvedTripDescriptions = new ArrayList<>();
+		List<TripDescriptionModel> unapprovedTripDescriptions = new ArrayList<>();
+
+		approvedTrips.forEach(t -> {
+			approvedTripDescriptions.add(new TripDescriptionModel(t));
+		});
+		unapprovedTrips.forEach(t -> {
+			unapprovedTripDescriptions.add(new TripDescriptionModel(t));
+		});
+
+		return ResponseEntity.ok(new TripDescriptionsByUserModel(approvedTripDescriptions, unapprovedTripDescriptions));
+	}
 }

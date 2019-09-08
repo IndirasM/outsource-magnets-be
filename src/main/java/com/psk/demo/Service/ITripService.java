@@ -8,4 +8,5 @@ import java.util.List;
 public interface ITripService {
 	List<Trip> getApprovedTripsByUserName(String username);
 	List<Trip> getUnapprovedTripsByUserName(String username);
+	List<Trip> findAll();
 }
