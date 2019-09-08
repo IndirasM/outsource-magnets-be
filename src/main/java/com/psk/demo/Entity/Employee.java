@@ -1,6 +1,5 @@
 package com.psk.demo.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,7 +18,7 @@ public class Employee implements UserDetails {
 
 	@Size(max = 50)
 	@Column(name = "full_name")
-	private String fullName;
+	private String name;
 
 	@Size(max = 100)
 	private String email;
@@ -47,8 +46,8 @@ public class Employee implements UserDetails {
 		return this.id;
 	}
 
-	public String getFullName() {
-		return this.fullName;
+	public String getName() {
+		return this.name;
 	}
 
 	public String getEmail() {
@@ -79,8 +78,8 @@ public class Employee implements UserDetails {
 		this.id = id;
 	}
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public void setEmail(String email) {

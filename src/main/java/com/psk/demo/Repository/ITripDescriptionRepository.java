@@ -6,8 +6,8 @@ import com.psk.demo.Entity.TripDescription;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface ITripRepository extends JpaRepository<Trip, Long> {
-	public List<Trip> findByEmployee(Employee employee);
-	List<Trip> findByTripDescriptionIn(TripDescription tripDescription);
+public interface ITripDescriptionRepository extends JpaRepository<TripDescription, Long> {
+	Optional<TripDescription> findById(Long id);
 }

@@ -9,5 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface IEmployeeService extends UserDetailsService {
 	public List<Employee> findAll();
 	public Optional<Employee> findById(Long id);
-	public Employee loadUserByEmail(String email);
+	public Employee findByEmail(String email);
+	public List<Employee> findByNameStartingWith(String fragment);
+	public List<Employee> findByTripDescription(Long id);
 }

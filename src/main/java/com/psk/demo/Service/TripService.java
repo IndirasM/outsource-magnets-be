@@ -1,15 +1,12 @@
 package com.psk.demo.Service;
 
 import com.psk.demo.Entity.Trip;
-import com.psk.demo.Exception.ResourceNotFoundException;
 import com.psk.demo.Helper.DateHelper;
 import com.psk.demo.Repository.ITripRepository;
 import com.psk.demo.Entity.Employee;
-import com.psk.demo.Entity.TripDescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class TripService implements ITripService {
 
 	@Override
 	public List<Trip> getApprovedTripsByUserName(String username) {
-		Employee employee = employeeService.loadUserByEmail(username);
+		Employee employee = employeeService.findByEmail(username);
 		List<Trip> trips = tripRepository.findByEmployee(employee);
 
 		trips.removeIf(t -> {
@@ -40,7 +37,7 @@ public class TripService implements ITripService {
 
 	@Override
 	public List<Trip> getUnapprovedTripsByUserName(String username) {
-		Employee employee = employeeService.loadUserByEmail(username);
+		Employee employee = employeeService.findByEmail(username);
 		List<Trip> trips = tripRepository.findByEmployee(employee);
 
 		trips.removeIf(t -> {

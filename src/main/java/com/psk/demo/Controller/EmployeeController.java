@@ -1,14 +1,25 @@
 package com.psk.demo.Controller;
 
+import com.psk.demo.Controller.Model.EmployeeInfo;
+import com.psk.demo.Controller.Model.EmployeeModel;
 import com.psk.demo.Exception.ResourceNotFoundException;
+import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.IEmployeeService;
 import com.psk.demo.Entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.psk.demo.Security.SecurityConstants.TOKEN_PREFIX;
+
 @RestController
+@RequestMapping("/api")
 public class EmployeeController
 {
 	@Autowired
@@ -16,6 +27,9 @@ public class EmployeeController
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private TokenUtil tokenUtil;
 
 	@RequestMapping("/test/{string}")
 	public String test(@PathVariable String string)
@@ -34,5 +48,38 @@ public class EmployeeController
 	public UserDetails getEmployeeByUsername(@PathVariable String email)
 	{
 		return employeeService.loadUserByUsername(email);
+	}
+
+	@RequestMapping(value = "/employee/search/{fragment}", method = RequestMethod.GET)
+	public List<EmployeeInfo> getEmployeeBySearch(@PathVariable String fragment)
+	{
+		List<Employee> employees = employeeService.findByNameStartingWith(fragment);
+		List<EmployeeInfo> response = new ArrayList<>();
+		employees.forEach(e -> {
+			response.add(new EmployeeInfo(e.getId(), e.getName(), e.getEmail()));
+		});
+
+		return response;
+	}
+
+	@RequestMapping(value = "/employee/by-trip-description/{idString}", method = RequestMethod.GET)
+	public List<EmployeeInfo> getEmployeeByTripId(@PathVariable String idString)
+	{
+		Long id = Long.parseLong(idString);
+		List<Employee> employees = employeeService.findByTripDescription(id);
+		List<EmployeeInfo> response = new ArrayList<>();
+		employees.forEach(e -> {
+			response.add(new EmployeeInfo(e.getId(), e.getName(), e.getEmail()));
+		});
+
+		return response;
+	}
+
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ResponseEntity<EmployeeModel> getDetails(HttpServletRequest request) throws Exception {
+		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
+
+		return ResponseEntity.ok(new EmployeeModel(employee));
 	}
 }

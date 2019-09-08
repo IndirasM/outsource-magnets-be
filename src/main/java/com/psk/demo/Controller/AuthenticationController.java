@@ -3,7 +3,6 @@ package com.psk.demo.Controller;
 import com.psk.demo.Controller.Model.JwtRequest;
 import com.psk.demo.Controller.Model.JwtResponse;
 import com.psk.demo.Controller.Model.PermissionResponse;
-import com.psk.demo.Exception.ResourceNotFoundException;
 import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.EmployeeService;
 import com.psk.demo.Entity.Employee;
@@ -13,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,7 +64,7 @@ public class AuthenticationController {
 	public ResponseEntity<?> getPermissions(HttpServletRequest request) throws Exception {
 		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
 
-		Employee employee = userDetailsService.loadUserByEmail(tokenUtil.getUsernameFromToken(token));
+		Employee employee = userDetailsService.findByEmail(tokenUtil.getUsernameFromToken(token));
 
 		List<String> roles = new ArrayList<>();
 		employee.getPermissions().forEach(p -> roles.add(p.getName()));
