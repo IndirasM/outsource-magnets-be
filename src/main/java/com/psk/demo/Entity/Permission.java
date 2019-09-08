@@ -1,10 +1,9 @@
-package com.psk.demo.entity;
+package com.psk.demo.Entity;
 
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @Entity
 @Table(name = "permission")

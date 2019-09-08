@@ -2,8 +2,10 @@ package com.psk.demo.Controller;
 
 import com.psk.demo.Controller.Model.JwtRequest;
 import com.psk.demo.Controller.Model.JwtResponse;
-import com.psk.demo.Security.JwtTokenUtil;
+import com.psk.demo.Controller.Model.PermissionResponse;
+import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.EmployeeService;
+import com.psk.demo.Entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,17 +20,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.psk.demo.Security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/user")
-public class JwtAuthenticationController {
+public class AuthenticationController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
+	private TokenUtil tokenUtil;
 
 	@Autowired
 	private EmployeeService userDetailsService;
@@ -40,7 +45,7 @@ public class JwtAuthenticationController {
 		final UserDetails userDetails = userDetailsService
 				.loadUserByUsername(authenticationRequest.getUsername());
 
-		final String token = jwtTokenUtil.generateToken(userDetails);
+		final String token = tokenUtil.generateToken(userDetails);
 
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
@@ -49,10 +54,22 @@ public class JwtAuthenticationController {
 	public ResponseEntity<?> refreshAuthenticationToken(HttpServletRequest request) throws Exception {
 		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
 
-		UserDetails userDetails = userDetailsService.loadUserByUsername(jwtTokenUtil.getUsernameFromToken(token));
-		String newToken = jwtTokenUtil.generateToken(userDetails);
+		UserDetails userDetails = userDetailsService.loadUserByUsername(tokenUtil.getUsernameFromToken(token));
+		String newToken = tokenUtil.generateToken(userDetails);
 
 		return ResponseEntity.ok(new JwtResponse(newToken));
+	}
+
+	@RequestMapping(value = "/permissions", method = RequestMethod.GET)
+	public ResponseEntity<?> getPermissions(HttpServletRequest request) throws Exception {
+		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+
+		Employee employee = userDetailsService.loadUserByEmail(tokenUtil.getUsernameFromToken(token));
+
+		List<String> roles = new ArrayList<>();
+		employee.getPermissions().forEach(p -> roles.add(p.getName()));
+
+		return ResponseEntity.ok(new PermissionResponse(roles));
 	}
 
 	private void authenticate(String username, String password) throws Exception {

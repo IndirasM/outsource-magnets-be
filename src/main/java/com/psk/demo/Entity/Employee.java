@@ -1,4 +1,4 @@
-package com.psk.demo.entity;
+package com.psk.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,8 +27,7 @@ public class Employee implements UserDetails {
 	@Size(max = 50)
 	private String password;
 
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "main_office", nullable = false)
 	private Office office;
 
@@ -37,6 +36,10 @@ public class Employee implements UserDetails {
 			joinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "employee_id"),
 			inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "permission_id"))
 	private Set<Permission> permissions;
+
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+	private Set<Trip> trips;
 
 	//region getters
 
@@ -62,6 +65,10 @@ public class Employee implements UserDetails {
 
 	public Set<Permission> getPermissions() {
 		return this.permissions;
+	}
+
+	public Set<Trip> getTrips() {
+		return this.trips;
 	}
 
 	//endregion
@@ -90,6 +97,10 @@ public class Employee implements UserDetails {
 
 	public void setPermissions(Set<Permission> permissions) {
 		this.permissions = permissions;
+	}
+
+	public void setTrips(Set<Trip> trips) {
+		this.trips = trips;
 	}
 
 	//endregion

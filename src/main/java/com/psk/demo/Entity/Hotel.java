@@ -1,21 +1,20 @@
-package com.psk.demo.entity;
+package com.psk.demo.Entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "office")
-public class Office {
+@Table(name = "hotel")
+public class Hotel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "office_id")
+	@Column(name = "hotel_id")
 	private Long id;
-
-	@Size(max = 50)
-	private String name;
 
 	@Size(max = 200)
 	private String address;
+
+	private Float price;
 
 	//region getters
 
@@ -23,13 +22,14 @@ public class Office {
 		return this.id;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
 	public String getAddress() {
 		return this.address;
 	}
+
+	public Float getPrice() {
+		return this.price;
+	}
+
 
 	//endregion
 
@@ -39,12 +39,12 @@ public class Office {
 		this.id = id;
 	}
 
-	public void getName(String name) {
-		this.name = name;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
-	public void getAddress(String address) {
-		this.address = address;
+	public void setPrice(Float price) {
+		this.price = price;
 	}
 
 	//endregion

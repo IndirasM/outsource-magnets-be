@@ -2,7 +2,7 @@ package com.psk.demo.Controller;
 
 import com.psk.demo.Exception.ResourceNotFoundException;
 import com.psk.demo.Service.IEmployeeService;
-import com.psk.demo.entity.Employee;
+import com.psk.demo.Entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;

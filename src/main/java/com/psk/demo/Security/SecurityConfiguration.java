@@ -1,7 +1,6 @@
 package com.psk.demo.Security;
 
 import com.psk.demo.Service.EmployeeService;
-import com.psk.demo.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private EmployeeService employeeService;
 
 	@Autowired
-	private JwtRequestFilter jwtRequestFilter;
+	private TokenRequestFilter tokenRequestFilter;
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -48,11 +47,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable()
-				.authorizeRequests().antMatchers("/api/user/authenticate", "/test").permitAll()
-				.anyRequest().authenticated().and()
-				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.authorizeRequests().antMatchers("/api/user/authenticate", "/test").permitAll();
+				//.anyRequest().authenticated().and()
+				//.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+				//.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		httpSecurity.addFilterBefore(tokenRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 }
