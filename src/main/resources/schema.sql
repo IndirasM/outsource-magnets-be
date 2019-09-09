@@ -51,7 +51,7 @@ CREATE TABLE employee
 (
 	employee_id BIGINT IDENTITY (1,1) PRIMARY KEY,
 	full_name   VARCHAR(50)     NOT NULL,
-	email       VARCHAR(100)    NOT NULL,
+	email       VARCHAR(100) UNIQUE NOT NULL,
 	password    VARCHAR(200)     NOT NULL,
 	main_office BIGINT          NOT NULL,
 	constraint fk_employee_main_office foreign key (main_office) references office (office_id)
@@ -98,7 +98,7 @@ CREATE TABLE employee_trip
 	employee_trip_id           BIGINT IDENTITY (1,1) PRIMARY KEY,
 	employee_id                BIGINT NOT NULL,
 	trip_id                    BIGINT NOT NULL,
-	is_approved                BIT DEFAULT NULL,
+	is_approved                INT NOT NULL DEFAULT 0,
 	apartment_id               BIGINT,
 	hotel_id                   BIGINT,
 	transport_id               BIGINT,

@@ -61,6 +61,26 @@ public class TripController {
 		return ResponseEntity.ok(new TripDescriptionsByUserModel(approvedTripDescriptions, unapprovedTripDescriptions));
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<TripDescriptionInfoModel> getTripDescriptionsByIdModel(@PathVariable Long id) throws Exception {
+		List<Trip> approvedTrips = tripService.getApprovedTripsByDescriptionId(id);
+		List<Trip> unapprovedTrips = tripService.getUnapprovedTripsByDescriptionId(id);
+		List<Trip> declinedTrips = tripService.getDeclinedTripsByDescriptionId(id);
+
+		List<EmployeeTripInfo> approvedTripInfoList = new ArrayList<>();
+		List<EmployeeTripInfo> unapprovedTripInfoList = new ArrayList<>();
+		List<EmployeeTripInfo> declinedTripInfoList = new ArrayList<>();
+
+		approvedTrips.forEach(t -> approvedTripInfoList.add(new EmployeeTripInfo(t)));
+		unapprovedTrips.forEach(t -> unapprovedTripInfoList.add(new EmployeeTripInfo(t)));
+		declinedTrips.forEach(t -> declinedTripInfoList.add(new EmployeeTripInfo(t)));
+
+		TripDescriptionInfoModel infoModel = new TripDescriptionInfoModel(tripService.findDescriptionById(id));
+		infoModel.employeeTrips = new EmployeeTripList(approvedTripInfoList, unapprovedTripInfoList, declinedTripInfoList);
+
+		return ResponseEntity.ok(infoModel);
+	}
+
 	@RequestMapping(value = "/search/{fragment}", method = RequestMethod.GET)
 	public ResponseEntity<List<TripInfo>> getTripsBySearch(@PathVariable String fragment)
 	{
@@ -81,16 +101,16 @@ public class TripController {
 		String email = tokenUtil.getUsernameFromToken(token);
 		Employee owner = employeeService.findByEmail(email);
 		Trip trip = tripService.findById(id);
-		if (!trip.getEmployee().getId().equals(owner.getId()) || trip.getIsApproved() != null)
+		if (!trip.getEmployee().getId().equals(owner.getId()) || trip.getIsApproved() != 0)
 			throw new AuthorizationServiceException("Unauthorized");
 
-		Trip resultTrip = tripService.setApproved(id, body.value);
+		Trip resultTrip = tripService.setApproved(id, body.value ? 1 : 2);
 
 		return ResponseEntity.ok(new TripDescriptionModel(resultTrip));
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public ResponseEntity approveTrip(HttpServletRequest request, @RequestBody TripCreationModel body) {
+	public ResponseEntity createTrip(HttpServletRequest request, @RequestBody TripCreationModel body) {
 		if (isTripCreationModelValid(body)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation failed");
 
 		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
@@ -115,6 +135,21 @@ public class TripController {
 		body.employees.forEach(e -> trips.add(createTrip(e, tripDescription)));
 
 		tripService.createTrips(trips);
+
+		return new ResponseEntity(HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity updateTrip(HttpServletRequest request, @RequestBody TripUpdateModel body, @PathVariable Long id) throws IllegalAccessException {
+		if (hasNullProperties(body)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation failed");
+
+		TripDescription tripDescription = tripService.findDescriptionById(id);
+		tripDescription.setName(body.name);
+		tripDescription.getChecklist().setNeedTransport(body.needTransport);
+		tripDescription.getChecklist().setNeedAccommodation(body.needAccommodation);
+		tripDescription.getChecklist().setNeedTicket(body.needTicket);
+
+		tripService.saveDescription(tripDescription);
 
 		return new ResponseEntity(HttpStatus.CREATED);
 	}

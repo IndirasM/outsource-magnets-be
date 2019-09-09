@@ -10,7 +10,12 @@ public interface ITripService {
 	List<Trip> getUnapprovedTripsByUserName(String username);
 	List<Trip> findAll();
 	List<TripDescription> findByNameStartingWith(String fragment);
-	Trip setApproved(long id, boolean value);
+	Trip setApproved(long id, int value);
 	Trip findById(long id);
 	TripDescription createTrips(List<Trip> trips);
+	TripDescription findDescriptionById(long id);
+	TripDescription saveDescription(TripDescription tripDescription);
+	List<Trip> getApprovedTripsByDescriptionId(Long id);
+	List<Trip> getUnapprovedTripsByDescriptionId(Long id);
+	List<Trip> getDeclinedTripsByDescriptionId(Long id);
 }

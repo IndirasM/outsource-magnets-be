@@ -10,7 +10,6 @@ public class TripDescriptionModel {
 	public String dateFrom;
 	public String dateTo;
 	public String destination;
-	public Boolean isApproved;
 
 	public TripDescriptionModel(Trip trip) {
 		this.id = trip.getId();
@@ -20,6 +19,5 @@ public class TripDescriptionModel {
 		this.dateFrom = trip.getTripDescription().getDateFrom();
 		this.dateTo = trip.getTripDescription().getDateTo();
 		this.destination = trip.getTripDescription().getDestination().getName();
-		this.isApproved = trip.getIsApproved();
 	}
 }

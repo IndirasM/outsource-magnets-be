@@ -13,4 +13,5 @@ public interface ITripRepository extends JpaRepository<Trip, Long> {
 	List<Trip> findAllById(Long id);
 	List<Trip> findByEmployee(Employee employee);
 	List<Trip> findByTripDescriptionIn(TripDescription tripDescription);
+	List<Trip> findByTripDescription(TripDescription id);
 }

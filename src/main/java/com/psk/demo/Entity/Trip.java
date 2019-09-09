@@ -1,5 +1,7 @@
 package com.psk.demo.Entity;
 
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 
 @Entity
@@ -19,7 +21,7 @@ public class Trip {
 	private Employee employee;
 
 	@Column(name = "is_approved", nullable = true)
-	private Boolean isApproved;
+	private int isApproved;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "hotel_id", nullable = true)
@@ -52,7 +54,7 @@ public class Trip {
 		return this.employee;
 	}
 
-	public Boolean getIsApproved() {
+	public int getIsApproved() {
 		return this.isApproved;
 	}
 
@@ -88,7 +90,7 @@ public class Trip {
 		this.employee = employee;
 	}
 
-	public void setIsApproved(Boolean isApproved) {
+	public void setIsApproved(int isApproved) {
 		this.isApproved = isApproved;
 	}
 
