@@ -3,6 +3,7 @@ package com.psk.demo.Controller.Model;
 import com.psk.demo.Entity.Trip;
 
 public class TripDescriptionModel {
+	public Long id;
 	public String name;
 	public String createdByName;
 	public String createdByEmail;
@@ -12,6 +13,7 @@ public class TripDescriptionModel {
 	public Boolean isApproved;
 
 	public TripDescriptionModel(Trip trip) {
+		this.id = trip.getId();
 		this.name = trip.getTripDescription().getName();
 		this.createdByName = trip.getTripDescription().getCreatedBy().getName();
 		this.createdByEmail = trip.getTripDescription().getCreatedBy().getEmail();
