@@ -1,5 +1,6 @@
 package com.psk.demo.Service;
 
+import com.psk.demo.Entity.Employee;
 import com.psk.demo.Entity.Trip;
 import com.psk.demo.Entity.TripDescription;
 
@@ -18,4 +19,6 @@ public interface ITripService {
 	List<Trip> getApprovedTripsByDescriptionId(Long id);
 	List<Trip> getUnapprovedTripsByDescriptionId(Long id);
 	List<Trip> getDeclinedTripsByDescriptionId(Long id);
+	List<TripDescription> findDescriptionsByCreatedBy(Employee employee);
+	List<Trip> findByTripDescription(TripDescription tripDescription);
 }

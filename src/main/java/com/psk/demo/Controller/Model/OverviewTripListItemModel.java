@@ -1,11 +1,10 @@
 package com.psk.demo.Controller.Model;
 
-import com.psk.demo.Entity.Trip;
 import com.psk.demo.Entity.TripDescription;
 
 import java.util.List;
 
-public class TripDescriptionInfoModel {
+public class OverviewTripListItemModel {
 	public Long id;
 	public String name;
 	public String dateFrom;
@@ -14,9 +13,9 @@ public class TripDescriptionInfoModel {
 	public boolean needTicket;
 	public boolean needAccommodation;
 	public boolean needTransport;
-	public EmployeeTripList employeeTrips;
+	public List<OverviewEmployeeModel> employees;
 
-	public TripDescriptionInfoModel(TripDescription tripDescription) {
+	public OverviewTripListItemModel(TripDescription tripDescription) {
 		this.id = tripDescription.getId();
 		this.name = tripDescription.getName();
 		this.dateFrom = tripDescription.getDateFrom();

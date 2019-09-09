@@ -61,6 +61,29 @@ public class TripController {
 		return ResponseEntity.ok(new TripDescriptionsByUserModel(approvedTripDescriptions, unapprovedTripDescriptions));
 	}
 
+	@RequestMapping(value = "/overview", method = RequestMethod.GET)
+	public ResponseEntity<List<OverviewTripListItemModel>> getTripDescriptionsForSuperviser(HttpServletRequest request) throws Exception {
+		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+		Employee supervisor = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
+		List<TripDescription> tripDescriptions = tripService.findDescriptionsByCreatedBy(supervisor);
+
+		List<OverviewTripListItemModel> tripListModels = new ArrayList<>();
+		tripDescriptions.forEach(td -> {
+			OverviewTripListItemModel model = new OverviewTripListItemModel(td);
+			List<OverviewEmployeeModel> employeeModels = new ArrayList<>();
+			List<Trip> trips = tripService.findByTripDescription(td);
+			trips.forEach(t -> {
+				Employee employee = t.getEmployee();
+				employeeModels.add(new OverviewEmployeeModel(employee.getId(), employee.getName(), employee.getEmail(), getApprovalStatus(t.getIsApproved())));
+			});
+			model.employees = employeeModels;
+
+			tripListModels.add(model);
+		});
+
+		return ResponseEntity.ok(tripListModels);
+	}
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<TripDescriptionInfoModel> getTripDescriptionsByIdModel(@PathVariable Long id) throws Exception {
 		List<Trip> approvedTrips = tripService.getApprovedTripsByDescriptionId(id);
@@ -189,6 +212,22 @@ public class TripController {
 			}
 		}
 		return false;
+	}
+
+	private String getApprovalStatus(int isApproved) {
+		String result = "";
+		switch (isApproved) {
+			case 0:
+				result = "PENDING";
+				break;
+			case 1:
+				result = "APPROVED";
+				break;
+			case 2:
+				result = "DECLINED";
+				break;
+		}
+		return result;
 	}
 	//endregion
 }

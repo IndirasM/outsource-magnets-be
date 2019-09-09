@@ -96,6 +96,14 @@ public class TripService implements ITripService {
 		return tripDescriptionRepository.save(tripDescription);
 	}
 
+	public List<TripDescription> findDescriptionsByCreatedBy(Employee employee) {
+		return tripDescriptionRepository.findByCreatedBy(employee);
+	}
+
+	public List<Trip> findByTripDescription(TripDescription tripDescription) {
+		return tripRepository.findByTripDescription(tripDescription);
+	}
+
 	//region Private methods
 	private List<Trip> filterTripsByRelevancy(List<Trip> trips) {
 		trips.removeIf(t -> {

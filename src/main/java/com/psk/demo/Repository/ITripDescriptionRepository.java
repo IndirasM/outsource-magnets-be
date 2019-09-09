@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface ITripDescriptionRepository extends JpaRepository<TripDescription, Long> {
 	Optional<TripDescription> findById(Long id);
 	List<TripDescription> findByNameStartingWith(String fragment);
+	List<TripDescription> findByCreatedBy(Employee employee);
 }
