@@ -86,7 +86,7 @@ CREATE TABLE trip
 	date_from              VARCHAR(50) NOT NULL,
 	date_to                VARCHAR(50) NOT NULL,
 	office_id              BIGINT NOT NULL,
-	checklist_id               BIGINT,
+	checklist_id           BIGINT NOT NULL,
 	constraint fk_trip_created_by foreign key (created_by) references employee (employee_id),
 	constraint fk_trip_office_id foreign key (office_id) references office (office_id),
 	constraint fk_trip_checklist_id foreign key (checklist_id) references checklist (checklist_id)

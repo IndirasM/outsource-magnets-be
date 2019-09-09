@@ -2,7 +2,6 @@ package com.psk.demo.Service;
 
 import com.psk.demo.Entity.Trip;
 import com.psk.demo.Entity.TripDescription;
-import com.psk.demo.Exception.ResourceNotFoundException;
 import com.psk.demo.Helper.DateHelper;
 import com.psk.demo.Repository.ITripDescriptionRepository;
 import com.psk.demo.Repository.ITripRepository;
@@ -33,7 +32,7 @@ public class TripService implements ITripService {
 			String tripDateTo = t.getTripDescription().getDateTo();
 			String formattedDate = DateHelper.formatDate(new Date());
 
-			boolean isIrrelevant = DateHelper.isLower(tripDateTo, formattedDate);
+			boolean isIrrelevant = DateHelper.isSooner(tripDateTo, formattedDate);
 			boolean notApproved = t.getIsApproved() == null || !t.getIsApproved();
 			return isIrrelevant || notApproved;
 		});
@@ -49,7 +48,7 @@ public class TripService implements ITripService {
 			String tripDateTo = t.getTripDescription().getDateTo();
 			String formattedDate = DateHelper.formatDate(new Date());
 
-			boolean isIrrelevant = DateHelper.isLower(tripDateTo, formattedDate);
+			boolean isIrrelevant = DateHelper.isSooner(tripDateTo, formattedDate);
 			boolean hasResponse = t.getIsApproved() != null;
 			return isIrrelevant || hasResponse;
 		});
@@ -73,5 +72,10 @@ public class TripService implements ITripService {
 
 	public Trip findById(long id) {
 		return tripRepository.findAllById(id).get(0);
+	}
+
+	public TripDescription createTrips(List<Trip> trips) {
+		List<Trip> createdTrips = tripRepository.saveAll(trips);
+		return createdTrips.get(0).getTripDescription();
 	}
 }

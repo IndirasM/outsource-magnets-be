@@ -1,10 +1,6 @@
 package com.psk.demo.Controller.Model;
 
 import com.psk.demo.Entity.Employee;
-import com.psk.demo.Entity.Office;
-import com.psk.demo.Entity.Permission;
-
-import java.util.Set;
 
 public class EmployeeModel {
 	public Long id;

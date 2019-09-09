@@ -22,7 +22,7 @@ public class Apartment {
 
 //	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 //	@OneToMany(mappedBy = "apartmentAccommodation", fetch = FetchType.LAZY)
-//	private Set<Trip> trips;
+//	private List<Trip> trips;
 
 	//region getters
 

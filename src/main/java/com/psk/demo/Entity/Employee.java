@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "employee")
@@ -34,11 +34,11 @@ public class Employee implements UserDetails {
 	@JoinTable(name = "permission_employee",
 			joinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "employee_id"),
 			inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "permission_id"))
-	private Set<Permission> permissions;
+	private List<Permission> permissions;
 
 	//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
-	private Set<Trip> trips;
+	private List<Trip> trips;
 
 	//region getters
 
@@ -62,11 +62,11 @@ public class Employee implements UserDetails {
 		return this.office;
 	}
 
-	public Set<Permission> getPermissions() {
+	public List<Permission> getPermissions() {
 		return this.permissions;
 	}
 
-	public Set<Trip> getTrips() {
+	public List<Trip> getTrips() {
 		return this.trips;
 	}
 
@@ -94,11 +94,11 @@ public class Employee implements UserDetails {
 		this.office = office;
 	}
 
-	public void setPermissions(Set<Permission> permissions) {
+	public void setPermissions(List<Permission> permissions) {
 		this.permissions = permissions;
 	}
 
-	public void setTrips(Set<Trip> trips) {
+	public void setTrips(List<Trip> trips) {
 		this.trips = trips;
 	}
 

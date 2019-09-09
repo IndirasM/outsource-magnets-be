@@ -10,7 +10,7 @@ public class Trip {
 	@Column(name = "employee_trip_id")
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "trip_id")
 	private TripDescription tripDescription;
 
@@ -21,20 +21,20 @@ public class Trip {
 	@Column(name = "is_approved", nullable = true)
 	private Boolean isApproved;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "hotel_id", nullable = true)
 	private Hotel hotel;
 
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "apartment_id", nullable = true)
 	private Apartment apartment;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ticket_id", nullable = true)
 	private Ticket ticket;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "transport_id", nullable = true)
 	private Transport transport;
 

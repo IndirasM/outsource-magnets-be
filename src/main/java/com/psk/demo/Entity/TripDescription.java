@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "trip")
@@ -33,7 +33,7 @@ public class TripDescription {
 	@JoinColumn(name = "office_id", nullable = false)
 	private Office destination;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
 	@JoinColumn(name = "checklist_id", nullable = true)
 	private Checklist checklist;
 
@@ -42,11 +42,11 @@ public class TripDescription {
 	@JoinTable(name = "employee_trip",
 			joinColumns = @JoinColumn(name = "trip_id", referencedColumnName = "trip_id"),
 			inverseJoinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "employee_id"))
-	private Set<Employee> employees;
+	private List<Employee> employees;
 
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	@OneToMany(mappedBy = "tripDescription", fetch = FetchType.LAZY)
-	private Set<Trip> trips;
+	@OneToMany(mappedBy = "tripDescription", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Trip> trips;
 
 	//region getters
 
@@ -78,11 +78,11 @@ public class TripDescription {
 		return this.checklist;
 	}
 
-	public Set<Employee> getEmployees() {
+	public List<Employee> getEmployees() {
 		return this.employees;
 	}
 
-	public Set<Trip> getTrips() {
+	public List<Trip> getTrips() {
 		return this.trips;
 	}
 
@@ -118,11 +118,11 @@ public class TripDescription {
 		this.checklist = checklist;
 	}
 
-	public void setEmployees(Set<Employee> employees) {
+	public void setEmployees(List<Employee> employees) {
 		this.employees = employees;
 	}
 
-	public void setTrips(Set<Trip> trips) {
+	public void setTrips(List<Trip> trips) {
 		this.trips = trips;
 	}
 
