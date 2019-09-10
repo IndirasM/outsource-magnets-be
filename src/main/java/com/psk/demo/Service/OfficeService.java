@@ -22,4 +22,8 @@ public class OfficeService implements IOfficeService {
 	public Office findById(Long id) {
 		return officeRepository.findAllById(id).get(0);
 	}
+
+	public Office save(Office office) {
+		return officeRepository.save(office);
+	}
 }

@@ -4,6 +4,8 @@ import com.psk.demo.Controller.Model.OfficeInfo;
 import com.psk.demo.Entity.Office;
 import com.psk.demo.Service.IOfficeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,5 +29,15 @@ public class OfficeController {
 		});
 
 		return response;
+	}
+
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public ResponseEntity<OfficeInfo> createOffice(@RequestBody OfficeInfo body) {
+		Office office = new Office();
+		office.setName(body.name);
+		office.setAddress(body.address);
+		officeService.save(office);
+
+		return ResponseEntity.ok(new OfficeInfo(office));
 	}
 }

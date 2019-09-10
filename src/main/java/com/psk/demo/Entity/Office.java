@@ -39,11 +39,11 @@ public class Office {
 		this.id = id;
 	}
 
-	public void getName(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void getAddress(String address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 

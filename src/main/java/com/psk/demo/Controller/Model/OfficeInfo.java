@@ -5,11 +5,11 @@ import com.psk.demo.Entity.Office;
 public class OfficeInfo {
 	public Long id;
 	public String name;
-	public String office;
+	public String address;
 
 	public OfficeInfo(Office office) {
 		this.id = office.getId();
 		this.name = office.getName();
-		this.office = office.getAddress();
+		this.address = office.getAddress();
 	}
 }
