@@ -1,14 +1,12 @@
 package com.psk.demo.Service;
 
+import com.psk.demo.Entity2.Employee;
+import com.psk.demo.Entity2.Team;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import java.util.List;
 import java.util.Optional;
 
-import com.psk.demo.Entity2.Employee;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-public interface IEmployeeService extends UserDetailsService {
-	public List<Employee> findAll();
-	public Optional<Employee> findById(Long id);
-	public Employee findByEmail(String email);
-	public List<Employee> findByNameStartingWith(String fragment);
+public interface ITeamService {
+	List<Team> findByTeamManager(Employee manager);
 }

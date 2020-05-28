@@ -1,112 +1,78 @@
-IF object_id('office') is null
-CREATE TABLE office
+IF object_id('role') is null
+CREATE TABLE role
 (
-	office_id BIGINT IDENTITY (1,1) PRIMARY KEY,
-	name      VARCHAR(50)  NOT NULL,
-	address   VARCHAR(200) NOT NULL,
+    role_id     BIGINT IDENTITY (1,1) PRIMARY KEY,
+    name        VARCHAR(50)  NOT NULL,
 );
 
-IF object_id('permission') is null
-CREATE TABLE permission
+IF object_id('subject') is null
+CREATE TABLE subject
 (
-	permission_id BIGINT IDENTITY (1,1) PRIMARY KEY,
-	name          VARCHAR(50) NOT NULL,
+    subject_id          BIGINT IDENTITY (1,1) PRIMARY KEY,
+    parent_subject_id   BIGINT,
+    name                VARCHAR(50) NOT NULL,
+    description         NTEXT,
+    date                VARCHAR(50) NOT NULL,
+    constraint fk_parent_subject_subject foreign key (parent_subject_id) references subject (subject_id)
 );
 
-IF object_id('checklist') is null
-CREATE TABLE checklist
+IF object_id('limit') is null
+CREATE TABLE limit
 (
-	checklist_id               BIGINT IDENTITY (1,1) PRIMARY KEY,
-	need_ticket                 BIT NOT NULL DEFAULT 0,
-	need_accommodation          BIT NOT NULL DEFAULT 0,
-	need_transport              BIT NOT NULL DEFAULT 0,
+    limit_id                    BIGINT IDENTITY (1,1) PRIMARY KEY,
+    is_global                   BIT NOT NULL DEFAULT 0,
+    days_in_year                INT NOT NULL,
+    days_in_month               INT NOT NULL,
+    days_in_row                 INT NOT NULL,
 );
 
-IF object_id('hotel') is null
-CREATE TABLE hotel
+IF object_id('team') is null
+CREATE TABLE team
 (
-	hotel_id        BIGINT IDENTITY (1,1) PRIMARY KEY,
-	address                    VARCHAR(200) NOT NULL,
-	price                      FLOAT NOT NULL
-);
-
-IF object_id('ticket') is null
-CREATE TABLE ticket
-(
-	ticket_id                  BIGINT IDENTITY (1,1) PRIMARY KEY,
-	description                VARCHAR(500),
-	price                      FLOAT NOT NULL
-);
-
-IF object_id('transport') is null
-CREATE TABLE transport
-(
-	transport_id               BIGINT IDENTITY (1,1) PRIMARY KEY,
-	description                VARCHAR(500),
-	price                      FLOAT NOT NULL
+    team_id                 BIGINT IDENTITY (1,1) PRIMARY KEY,
+    name                    VARCHAR(50) NOT NULL,
+    manager_employee_id     BIGINT NOT NULL,
 );
 
 IF object_id('employee') is null
 CREATE TABLE employee
 (
-	employee_id BIGINT IDENTITY (1,1) PRIMARY KEY,
-	full_name   VARCHAR(50)     NOT NULL,
-	email       VARCHAR(100) UNIQUE NOT NULL,
-	password    VARCHAR(200)     NOT NULL,
-	main_office BIGINT          NOT NULL,
-	constraint fk_employee_main_office foreign key (main_office) references office (office_id)
+    employee_id     BIGINT IDENTITY (1,1) PRIMARY KEY,
+    name            VARCHAR(50),
+    email           VARCHAR(50),
+    password        VARCHAR(50),
+    team_id         BIGINT,
+    limit_id        BIGINT NOT NULL,
+    role_id         BIGINT NOT NULL,
+    constraint fk_employee_team foreign key (team_id) references team (team_id),
+    constraint fk_employee_limit foreign key (limit_id) references limit (limit_id),
+    constraint fk_employee_role foreign key (role_id) references role (role_id),
 );
 
-IF object_id('apartment') is null
-CREATE TABLE apartment
+IF object_id('employee_subject') is null
+CREATE TABLE employee_subject
 (
-	apartment_id           BIGINT IDENTITY (1,1) PRIMARY KEY,
-	address                VARCHAR(200) NOT NULL,
-	capacity               INT NOT NULL,
-	office_id              BIGINT NOT NULL,
-	constraint fk_apartment_office_id foreign key (office_id) references office (office_id)
+    employee_subject_id     BIGINT IDENTITY (1,1) PRIMARY KEY,
+    employee_id             BIGINT NOT NULL,
+    subject_id              BIGINT NOT NULL,
+    created                 VARCHAR(50) NOT NULL,
+    constraint fk_employee_subject_employee foreign key (employee_id) references employee (employee_id),
+    constraint fk_employee_subject_subject foreign key (subject_id) references subject (subject_id),
 );
 
-IF object_id('permission_employee') is null
-CREATE TABLE permission_employee
+IF object_id('learning_day') is null
+CREATE TABLE learning_day
 (
-	permission_employee_id BIGINT IDENTITY (1,1) PRIMARY KEY,
-	permission_id          BIGINT not null,
-	employee_id            BIGINT not null,
-	constraint fk_pe_permission_id foreign key (permission_id) references permission (permission_id),
-	constraint fk_pe_employee_id foreign key (employee_id) references employee (employee_id)
+    learning_day_id     BIGINT IDENTITY (1,1) PRIMARY KEY,
+    subject_id          BIGINT NOT NULL,
+    employee_id         BIGINT NOT NULL,
+    date                VARCHAR(50) NOT NULL,
+    created             VARCHAR(50) NOT NULL,
+    notes               NTEXT,
+    constraint fk_learning_day_subject foreign key (subject_id) references subject (subject_id),
+    constraint fk_learning_day_employee foreign key (employee_id) references employee (employee_id),
 );
 
-IF object_id('trip') is null
-CREATE TABLE trip
-(
-	trip_id                BIGINT IDENTITY (1,1) PRIMARY KEY,
-	created_by             BIGINT NOT NULL,
-	name                   VARCHAR(50) NOT NULL,
-	date_from              VARCHAR(50) NOT NULL,
-	date_to                VARCHAR(50) NOT NULL,
-	office_id              BIGINT NOT NULL,
-	checklist_id           BIGINT NOT NULL,
-	constraint fk_trip_created_by foreign key (created_by) references employee (employee_id),
-	constraint fk_trip_office_id foreign key (office_id) references office (office_id),
-	constraint fk_trip_checklist_id foreign key (checklist_id) references checklist (checklist_id)
-);
-
-IF object_id('employee_trip') is null
-CREATE TABLE employee_trip
-(
-	employee_trip_id           BIGINT IDENTITY (1,1) PRIMARY KEY,
-	employee_id                BIGINT NOT NULL,
-	trip_id                    BIGINT NOT NULL,
-	is_approved                INT NOT NULL DEFAULT 0,
-	apartment_id               BIGINT,
-	hotel_id                   BIGINT,
-	transport_id               BIGINT,
-	ticket_id                  BIGINT,
-	constraint fk_et_employee_id foreign key (employee_id) references employee (employee_id),
-	constraint fk_et_trip_id foreign key (trip_id) references trip (trip_id),
-	constraint fk_et_apartment_id foreign key (apartment_id) references apartment (apartment_id),
-	constraint fk_et_hotel_id foreign key (hotel_id) references hotel (hotel_id),
-	constraint fk_et_transport_id foreign key (transport_id) references transport (transport_id),
-	constraint fk_et_ticket_id foreign key (ticket_id) references ticket (ticket_id)
-);
+IF (OBJECT_ID('fk_team_employee') IS NULL)
+ALTER TABLE dbo.team
+    ADD constraint fk_team_employee foreign key (manager_employee_id) references employee (employee_id);

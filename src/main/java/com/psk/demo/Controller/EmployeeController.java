@@ -5,7 +5,7 @@ import com.psk.demo.Controller.Model.EmployeeModel;
 import com.psk.demo.Exception.ResourceNotFoundException;
 import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.IEmployeeService;
-import com.psk.demo.Entity.Employee;
+import com.psk.demo.Entity2.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -54,19 +54,6 @@ public class EmployeeController
 	public List<EmployeeInfo> getEmployeesBySearch(@PathVariable String fragment)
 	{
 		List<Employee> employees = employeeService.findByNameStartingWith(fragment);
-		List<EmployeeInfo> response = new ArrayList<>();
-		employees.forEach(e -> {
-			response.add(new EmployeeInfo(e.getId(), e.getName(), e.getEmail()));
-		});
-
-		return response;
-	}
-
-	@RequestMapping(value = "/by-trip-description/{idString}", method = RequestMethod.GET)
-	public List<EmployeeInfo> getEmployeeByTripId(@PathVariable String idString)
-	{
-		Long id = Long.parseLong(idString);
-		List<Employee> employees = employeeService.findByTripDescription(id);
 		List<EmployeeInfo> response = new ArrayList<>();
 		employees.forEach(e -> {
 			response.add(new EmployeeInfo(e.getId(), e.getName(), e.getEmail()));

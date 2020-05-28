@@ -1,23 +1,19 @@
 package com.psk.demo.Entity2;
 
-import com.psk.demo.Entity.Office;
-import com.psk.demo.Entity.Permission;
-import com.psk.demo.Entity.Trip;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
-@Table(name = "team")
-public class User {
+@Table(name = "employee")
+public class Employee implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "team_id")
-    private Long userId;
+    @Column(name = "employee_id")
+    private Long employeeId;
 
     @Size(max = 50)
     private String name;
@@ -43,7 +39,7 @@ public class User {
     //region getters
 
     public Long getId() {
-        return this.userId;
+        return this.employeeId;
     }
 
     public String getName() {
@@ -54,8 +50,38 @@ public class User {
         return this.email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
     public String getPassword() {
         return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public Team getTeam() {
@@ -75,7 +101,7 @@ public class User {
     //region setters
 
     public void setId(Long id) {
-        this.userId = id;
+        this.employeeId = id;
     }
 
     public void setName(String name) {

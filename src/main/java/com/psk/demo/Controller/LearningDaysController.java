@@ -1,72 +1,73 @@
 package com.psk.demo.Controller;
 
-import com.psk.demo.Controller.Model.EmployeeInfo;
-import com.psk.demo.Controller.Model.EmployeeModel;
-import com.psk.demo.Exception.ResourceNotFoundException;
+import com.psk.demo.Controller.Model.EmployeeLearningDayModel;
+import com.psk.demo.Controller.Model.LearningDayModel;
+import com.psk.demo.Entity2.Employee;
+import com.psk.demo.Entity2.LearningDay;
 import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.IEmployeeService;
-import com.psk.demo.Entity2.Employee;
+import com.psk.demo.Service.ILearningDayService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.psk.demo.Security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
-@RequestMapping("/api/employee")
-public class EmployeeController
+@RequestMapping("/api/learningDays")
+public class LearningDaysController
 {
 	@Autowired
 	private IEmployeeService employeeService;
 
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private ILearningDayService learningDayService;
 
 	@Autowired
 	private TokenUtil tokenUtil;
 
-	@RequestMapping("/test/{string}")
-	public String test(@PathVariable String string)
-	{
-		return passwordEncoder.encode(string);
-	}
-
-	@RequestMapping("/{id:[0-9]+}")
-	public Employee getEmployee(@PathVariable String id)
-	{
-		Long parsedId = Long.parseLong(id, 10);
-		return employeeService.findById(parsedId).orElseThrow(ResourceNotFoundException::new);
-	}
-
-	@RequestMapping("/by-email/{email}")
-	public UserDetails getEmployeeByUsername(@PathVariable String email)
-	{
-		return employeeService.loadUserByUsername(email);
-	}
-
-	@RequestMapping(value = "/search/{fragment}", method = RequestMethod.GET)
-	public List<EmployeeInfo> getEmployeesBySearch(@PathVariable String fragment)
-	{
-		List<Employee> employees = employeeService.findByNameStartingWith(fragment);
-		List<EmployeeInfo> response = new ArrayList<>();
-		employees.forEach(e -> {
-			response.add(new EmployeeInfo(e.getId(), e.getName(), e.getEmail()));
-		});
-
-		return response;
-	}
-
 	@RequestMapping(method = RequestMethod.GET)
-	public EmployeeModel getDetails(HttpServletRequest request) throws Exception {
-		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
-		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
+	public List<LearningDayModel> getUserLearningDays(HttpServletRequest request) throws Exception {
+//		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+//		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
+		long id = 1;
+		Optional<Employee> employee = employeeService.findById(id);
 
-		return new EmployeeModel(employee);
+		if (employee.isPresent())
+		{
+			List<LearningDay> learningDays = learningDayService.findByEmployee(employee.get());
+			List<LearningDayModel> result = learningDays.stream()
+					.map(LearningDayModel::new)
+					.collect(Collectors.toList());
+
+			return result;
+		}
+		return new ArrayList<LearningDayModel>();
+	}
+
+	@RequestMapping(value = "/staffers", method = RequestMethod.GET)
+	public List<EmployeeLearningDayModel> getStaffersLearningDays(HttpServletRequest request) throws Exception {
+//		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+//		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
+		long id = 1;
+		Optional<Employee> employee = employeeService.findById(id);
+
+		if (employee.isPresent())
+		{
+			List<LearningDay> learningDays = learningDayService.findByManager(employee.get());
+			List<EmployeeLearningDayModel> result = learningDays.stream()
+					.map(EmployeeLearningDayModel::new)
+					.collect(Collectors.toList());
+
+			return result;
+		}
+		return new ArrayList<EmployeeLearningDayModel>();
 	}
 }

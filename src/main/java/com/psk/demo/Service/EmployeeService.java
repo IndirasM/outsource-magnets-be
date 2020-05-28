@@ -1,12 +1,10 @@
 package com.psk.demo.Service;
 
-import com.psk.demo.Entity.Trip;
-import com.psk.demo.Entity.TripDescription;
+import com.psk.demo.Entity2.Team;
 import com.psk.demo.Exception.ResourceNotFoundException;
 import com.psk.demo.Repository.IEmployeeRepository;
-import com.psk.demo.Entity.Employee;
-import com.psk.demo.Repository.ITripDescriptionRepository;
-import com.psk.demo.Repository.ITripRepository;
+import com.psk.demo.Entity2.Employee;
+import com.psk.demo.Repository.ITeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,15 +18,12 @@ import java.util.Optional;
 public class EmployeeService implements IEmployeeService {
 	@Autowired
 	private IEmployeeRepository employeeRepository;
-
 	@Autowired
-	private ITripDescriptionRepository tripDescriptionRepository;
+	private ITeamRepository teamRepository;
 
-	@Autowired
-	private ITripRepository tripRepository;
-
-	public EmployeeService(IEmployeeRepository employeeRepository) {
+	public EmployeeService(IEmployeeRepository employeeRepository, ITeamRepository teamRepository) {
 		this.employeeRepository = employeeRepository;
+		this.teamRepository = teamRepository;
 	}
 
 	@Override
@@ -37,7 +32,7 @@ public class EmployeeService implements IEmployeeService {
 	}
 
 	@Override
-	public Optional<Employee> findById(Long id) {
+	public Optional<Employee> findById(long id) {
 		return employeeRepository.findById(id);
 	}
 
@@ -55,16 +50,5 @@ public class EmployeeService implements IEmployeeService {
 
 	public List<Employee> findByNameStartingWith(String fragment) {
 		return employeeRepository.findByNameStartingWith(fragment);
-	}
-
-	public List<Employee> findByTripDescription(Long id) {
-		TripDescription tripDescription = tripDescriptionRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-		List<Trip> trips = tripRepository.findByTripDescriptionIn(tripDescription);
-
-		List<Employee> employees = new ArrayList<>();
-		trips.forEach(t -> {
-			employees.add(t.getEmployee());
-		});
-		return employees;
 	}
 }

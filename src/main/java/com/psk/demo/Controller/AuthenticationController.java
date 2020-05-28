@@ -5,7 +5,7 @@ import com.psk.demo.Controller.Model.JwtResponse;
 import com.psk.demo.Controller.Model.PermissionResponse;
 import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.EmployeeService;
-import com.psk.demo.Entity.Employee;
+import com.psk.demo.Entity2.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -60,17 +60,17 @@ public class AuthenticationController {
 		return ResponseEntity.ok(new JwtResponse(newToken));
 	}
 
-	@RequestMapping(value = "/permissions", method = RequestMethod.GET)
-	public ResponseEntity<?> getPermissions(HttpServletRequest request) throws Exception {
-		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
-
-		Employee employee = userDetailsService.findByEmail(tokenUtil.getUsernameFromToken(token));
-
-		List<String> roles = new ArrayList<>();
-		employee.getPermissions().forEach(p -> roles.add(p.getName()));
-
-		return ResponseEntity.ok(new PermissionResponse(roles));
-	}
+//	@RequestMapping(value = "/permissions", method = RequestMethod.GET)
+//	public ResponseEntity<?> getPermissions(HttpServletRequest request) throws Exception {
+//		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+//
+//		Employee employee = userDetailsService.findByEmail(tokenUtil.getUsernameFromToken(token));
+//
+//		List<String> roles = new ArrayList<>();
+//		employee.getPermissions().forEach(p -> roles.add(p.getName()));
+//
+//		return ResponseEntity.ok(new PermissionResponse(roles));
+//	}
 
 	private void authenticate(String username, String password) throws Exception {
 		try {

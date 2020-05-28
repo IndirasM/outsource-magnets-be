@@ -5,6 +5,7 @@ import com.psk.demo.Entity2.LearningDay;
 
 import java.util.List;
 
-public interface ILearningDaysService {
-    List<LearningDay> findByLearningDayEmployee(Employee employee);
+public interface ILearningDayService {
+    List<LearningDay> findByEmployee(Employee employee);
+    List<LearningDay> findByManager(Employee manager);
 }

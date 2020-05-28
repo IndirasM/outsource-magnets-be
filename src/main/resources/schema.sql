@@ -9,11 +9,10 @@ IF object_id('subject') is null
 CREATE TABLE subject
 (
     subject_id          BIGINT IDENTITY (1,1) PRIMARY KEY,
-    parent_subject_id   BIGINT NOT NULL,
+    parent_subject_id   BIGINT,
     name                VARCHAR(50) NOT NULL,
-    description         NTEXT NOT NULL,
+    description         NTEXT,
     date                VARCHAR(50) NOT NULL,
-    constraint fk_parent_subject_subject foreign key (parent_subject_id) references subject (subject_id)
 );
 
 IF object_id('limit') is null
@@ -41,12 +40,9 @@ CREATE TABLE employee
     name            VARCHAR(50),
     email           VARCHAR(50),
     password        VARCHAR(50),
-    team_id         BIGINT NOT NULL,
+    team_id         BIGINT,
     limit_id        BIGINT NOT NULL,
     role_id         BIGINT NOT NULL,
-    constraint fk_employee_team foreign key (team_id) references team (team_id),
-    constraint fk_employee_limit foreign key (limit_id) references limit (limit_id),
-    constraint fk_employee_role foreign key (role_id) references role (role_id),
 );
 
 IF object_id('employee_subject') is null
@@ -56,8 +52,6 @@ CREATE TABLE employee_subject
     employee_id             BIGINT NOT NULL,
     subject_id              BIGINT NOT NULL,
     created                 VARCHAR(50) NOT NULL,
-    constraint fk_employee_subject_employee foreign key (employee_id) references employee (employee_id),
-    constraint fk_employee_subject_subject foreign key (subject_id) references subject (subject_id),
 );
 
 IF object_id('learning_day') is null
@@ -68,11 +62,5 @@ CREATE TABLE learning_day
     employee_id         BIGINT NOT NULL,
     date                VARCHAR(50) NOT NULL,
     created             VARCHAR(50) NOT NULL,
-    notes               NTEXT NOT NULL,
-    constraint fk_learning_day_subject foreign key (subject_id) references subject (subject_id),
-    constraint fk_learning_day_employee foreign key (employee_id) references employee (employee_id),
+    notes               NTEXT,
 );
-
-IF (OBJECT_ID('fk_team_employee') IS NULL)
-ALTER TABLE dbo.team
-    ADD constraint fk_team_employee foreign key (manager_employee_id) references employee (employee_id);

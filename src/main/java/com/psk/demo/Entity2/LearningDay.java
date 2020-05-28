@@ -1,106 +1,64 @@
 package com.psk.demo.Entity2;
 
-import com.psk.demo.Entity.Office;
-import com.psk.demo.Entity.Permission;
-import com.psk.demo.Entity.Trip;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.List;
 
 @Entity
-@Table(name = "team")
-public class User {
+@Table(name = "learning_day")
+public class LearningDay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "team_id")
-    private Long userId;
-
-    @Size(max = 50)
-    private String name;
-
-    @Size(max = 50)
-    private String email;
-
-    @Size(max = 50)
-    private String password;
+    @Column(name = "learning_day_id")
+    private Long learningDayId;
 
     @ManyToOne
-    @JoinColumn(name = "team_id")
-    private Team team;
+    @JoinColumn(name="subject_id")
+    private Subject subject;
 
     @ManyToOne
-    @JoinColumn(name = "limit_id")
-    private Limit limit;
+    @JoinColumn(name="employee_id")
+    private Employee employee;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    private String date;
 
-    //region getters
+    private String notes;
+
+    private String created;
 
     public Long getId() {
-        return this.userId;
+        return this.learningDayId;
+    }
+    public Subject getSubject() {
+        return this.subject;
+    }
+    public Employee getEmployee() {
+        return this.employee;
+    }
+    public String getDate() {
+        return this.date;
+    }
+    public String getNotes() {
+        return this.notes;
+    }
+    public String getCreated() {
+        return this.created;
     }
 
-    public String getName() {
-        return this.name;
+    public void setId(Long learningDayId) {
+        this.learningDayId = learningDayId;
     }
-
-    public String getEmail() {
-        return this.email;
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
-
-    public String getPassword() {
-        return this.password;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
-
-    public Team getTeam() {
-        return this.team;
+    public void setDate(String date) {
+        this.date = date;
     }
-
-    public Limit getLimit() {
-        return this.limit;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
-
-    public Role getRole() {
-        return this.role;
+    public void setCreated(String created) {
+        this.created = created;
     }
-
-    //endregion
-
-    //region setters
-
-    public void setId(Long id) {
-        this.userId = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
-    public void setLimit(Limit limit) {
-        this.limit = limit;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    //endregion
 }
