@@ -8,6 +8,7 @@ import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.IEmployeeService;
 import com.psk.demo.Service.ILearningDayService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,5 +68,13 @@ public class LearningDaysController
 			return result;
 		}
 		return new ArrayList<EmployeeLearningDayModel>();
+	}
+
+
+	@RequestMapping(value = "/delete/{id:[0-9]+}", method = RequestMethod.GET)
+	public void delete(@PathVariable String id)
+	{
+		Long parsedId = Long.parseLong(id, 10);
+		learningDayService.delete(parsedId);
 	}
 }

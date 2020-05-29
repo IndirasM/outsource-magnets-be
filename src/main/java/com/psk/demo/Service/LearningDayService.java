@@ -42,4 +42,9 @@ public class LearningDayService implements ILearningDayService {
         }
         return learningDayRepository.findByEmployeeIn(employees);
     }
+
+    @Override
+    public void delete(Long id) {
+        learningDayRepository.deleteById(id);
+    }
 }

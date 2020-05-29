@@ -8,4 +8,5 @@ import java.util.List;
 public interface ILearningDayService {
     List<LearningDay> findByEmployee(Employee employee);
     List<LearningDay> findByManager(Employee manager);
+    void delete(Long id);
 }

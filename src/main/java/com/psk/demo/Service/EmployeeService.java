@@ -1,5 +1,6 @@
 package com.psk.demo.Service;
 
+import com.psk.demo.Entity.Team;
 import com.psk.demo.Repository.IEmployeeRepository;
 import com.psk.demo.Entity.Employee;
 import com.psk.demo.Repository.ITeamRepository;
@@ -47,5 +48,11 @@ public class EmployeeService implements IEmployeeService {
 
 	public List<Employee> findByNameStartingWith(String fragment) {
 		return employeeRepository.findByNameStartingWith(fragment);
+	}
+
+	@Override
+	public List<Employee> findByManager(Employee manager) {
+		List<Team> teams = teamRepository.findByManager(manager);
+		return employeeRepository.findByTeamIn(teams);
 	}
 }

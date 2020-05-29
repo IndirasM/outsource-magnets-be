@@ -11,4 +11,5 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
 	Employee findByEmail(String email);
 	List<Employee> findByNameStartingWith(String fragment);
 	List<Employee> findByTeam(Team team);
+	List<Employee> findByTeamIn(List<Team> team);
 }
