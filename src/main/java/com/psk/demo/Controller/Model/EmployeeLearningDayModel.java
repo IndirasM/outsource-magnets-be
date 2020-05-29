@@ -1,6 +1,6 @@
 package com.psk.demo.Controller.Model;
 
-import com.psk.demo.Entity2.LearningDay;
+import com.psk.demo.Entity.LearningDay;
 
 public class EmployeeLearningDayModel {
     public Long employeeId;

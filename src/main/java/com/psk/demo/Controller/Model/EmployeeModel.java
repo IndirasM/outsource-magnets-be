@@ -1,6 +1,6 @@
 package com.psk.demo.Controller.Model;
 
-import com.psk.demo.Entity2.Employee;
+import com.psk.demo.Entity.Employee;
 
 public class EmployeeModel {
 	public Long id;

@@ -1,4 +1,4 @@
-package com.psk.demo.Entity2;
+package com.psk.demo.Entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;

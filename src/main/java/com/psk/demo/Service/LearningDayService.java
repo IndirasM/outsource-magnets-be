@@ -1,8 +1,8 @@
 package com.psk.demo.Service;
 
-import com.psk.demo.Entity2.Employee;
-import com.psk.demo.Entity2.LearningDay;
-import com.psk.demo.Entity2.Team;
+import com.psk.demo.Entity.Employee;
+import com.psk.demo.Entity.LearningDay;
+import com.psk.demo.Entity.Team;
 import com.psk.demo.Repository.IEmployeeRepository;
 import com.psk.demo.Repository.ILearningDayRepository;
 import com.psk.demo.Repository.ITeamRepository;

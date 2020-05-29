@@ -2,8 +2,8 @@ package com.psk.demo.Controller;
 
 import com.psk.demo.Controller.Model.EmployeeLearningDayModel;
 import com.psk.demo.Controller.Model.LearningDayModel;
-import com.psk.demo.Entity2.Employee;
-import com.psk.demo.Entity2.LearningDay;
+import com.psk.demo.Entity.Employee;
+import com.psk.demo.Entity.LearningDay;
 import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.IEmployeeService;
 import com.psk.demo.Service.ILearningDayService;
@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.psk.demo.Security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
 @RequestMapping("/api/learningDays")

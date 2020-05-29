@@ -1,7 +1,7 @@
 package com.psk.demo.Service;
 
-import com.psk.demo.Entity2.Employee;
-import com.psk.demo.Entity2.LearningDay;
+import com.psk.demo.Entity.Employee;
+import com.psk.demo.Entity.LearningDay;
 
 import java.util.List;
 

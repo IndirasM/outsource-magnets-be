@@ -1,6 +1,6 @@
 package com.psk.demo.Controller.Model;
 
-import com.psk.demo.Entity2.Subject;
+import com.psk.demo.Entity.Subject;
 
 public class SubjectModel {
     public String name;

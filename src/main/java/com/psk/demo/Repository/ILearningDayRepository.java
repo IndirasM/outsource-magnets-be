@@ -1,7 +1,7 @@
 package com.psk.demo.Repository;
 
-import com.psk.demo.Entity2.Employee;
-import com.psk.demo.Entity2.LearningDay;
+import com.psk.demo.Entity.Employee;
+import com.psk.demo.Entity.LearningDay;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

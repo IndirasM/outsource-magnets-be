@@ -1,6 +1,6 @@
 package com.psk.demo.Service;
 
-import com.psk.demo.Entity2.Subject;
+import com.psk.demo.Entity.Subject;
 import com.psk.demo.Repository.ISubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

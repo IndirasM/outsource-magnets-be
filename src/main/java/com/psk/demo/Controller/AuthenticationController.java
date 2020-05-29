@@ -2,10 +2,8 @@ package com.psk.demo.Controller;
 
 import com.psk.demo.Controller.Model.JwtRequest;
 import com.psk.demo.Controller.Model.JwtResponse;
-import com.psk.demo.Controller.Model.PermissionResponse;
 import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.EmployeeService;
-import com.psk.demo.Entity2.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.psk.demo.Security.SecurityConstants.TOKEN_PREFIX;
 

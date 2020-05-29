@@ -1,9 +1,9 @@
 package com.psk.demo.Repository;
 
-import com.psk.demo.Entity2.Team;
+import com.psk.demo.Entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.psk.demo.Entity2.Employee;
+import com.psk.demo.Entity.Employee;
 
 import java.util.List;
 

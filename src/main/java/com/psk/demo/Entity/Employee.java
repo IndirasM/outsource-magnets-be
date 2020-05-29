@@ -1,4 +1,4 @@
-package com.psk.demo.Entity2;
+package com.psk.demo.Entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
