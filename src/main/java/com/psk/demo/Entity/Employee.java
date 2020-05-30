@@ -21,7 +21,7 @@ public class Employee implements UserDetails {
     @Size(max = 50)
     private String email;
 
-    @Size(max = 50)
+    @Size(max = 150)
     private String password;
 
     @ManyToOne

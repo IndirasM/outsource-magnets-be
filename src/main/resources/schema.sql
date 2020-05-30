@@ -39,7 +39,7 @@ CREATE TABLE employee
     employee_id     BIGINT IDENTITY (1,1) PRIMARY KEY,
     name            VARCHAR(50),
     email           VARCHAR(50),
-    password        VARCHAR(50),
+    password        VARCHAR(150),
     team_id         BIGINT,
     limit_id        BIGINT NOT NULL,
     role_id         BIGINT NOT NULL,
