@@ -71,7 +71,7 @@ public class LearningDaysController
 	}
 
 
-	@RequestMapping(value = "/delete/{id:[0-9]+}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id:[0-9]+}", method = RequestMethod.DELETE)
 	public void delete(@PathVariable String id)
 	{
 		Long parsedId = Long.parseLong(id, 10);

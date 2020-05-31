@@ -1,6 +1,9 @@
 package com.psk.demo.Controller;
 
 import com.psk.demo.Controller.Model.SubjectModel;
+import com.psk.demo.Entity.Employee;
+import com.psk.demo.Entity.Subject;
+import com.psk.demo.Exception.ResourceNotFoundException;
 import com.psk.demo.Service.ISubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,14 +22,16 @@ public class SubjectController
 	private ISubjectService subjectService;
 
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
-	public List<SubjectModel> getAllSubject()
+	public List<SubjectModel> getAllSubjects()
 	{
 		return subjectService.findAll().stream().map(SubjectModel::new).collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/{id:[0-9]+}", method = RequestMethod.GET)
-	public List<SubjectModel> getSubjectsById(@PathVariable String id)
+	public SubjectModel getSubjectById(@PathVariable String id)
 	{
-		return subjectService.findAll().stream().map(SubjectModel::new).collect(Collectors.toList());
+		Long parsedId = Long.parseLong(id, 10);
+		Subject subject = subjectService.findById(parsedId).orElseThrow(ResourceNotFoundException::new);
+		return new SubjectModel(subject);
 	}
 }

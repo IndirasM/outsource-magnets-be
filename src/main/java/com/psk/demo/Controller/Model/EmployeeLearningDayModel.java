@@ -7,11 +7,13 @@ public class EmployeeLearningDayModel {
     public String employeeName;
     public String title;
     public String date;
+    public Long subjectId;
 
     public EmployeeLearningDayModel(LearningDay ld) {
         this.employeeId = ld.getEmployee().getId();
         this.employeeName = ld.getEmployee().getName();
         this.title = ld.getSubject().getName();
         this.date = ld.getDate();
+        this.subjectId = ld.getSubject().getId();
     }
 }
