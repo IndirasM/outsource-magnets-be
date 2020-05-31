@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.psk.demo.Security.SecurityConstants.TOKEN_PREFIX;
+
 @RestController
 @RequestMapping("/api/learningDays")
 public class LearningDaysController
@@ -53,21 +55,15 @@ public class LearningDaysController
 
 	@RequestMapping(value = "/staffers", method = RequestMethod.GET)
 	public List<EmployeeLearningDayModel> getStaffersLearningDays(HttpServletRequest request) throws Exception {
-//		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
-//		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
-		long id = 1;
-		Optional<Employee> employee = employeeService.findById(id);
+		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
 
-		if (employee.isPresent())
-		{
-			List<LearningDay> learningDays = learningDayService.findByManager(employee.get());
-			List<EmployeeLearningDayModel> result = learningDays.stream()
-					.map(EmployeeLearningDayModel::new)
-					.collect(Collectors.toList());
+		List<LearningDay> learningDays = learningDayService.findByManager(employee);
+		List<EmployeeLearningDayModel> result = learningDays.stream()
+				.map(EmployeeLearningDayModel::new)
+				.collect(Collectors.toList());
 
-			return result;
-		}
-		return new ArrayList<EmployeeLearningDayModel>();
+		return result;
 	}
 
 
@@ -80,16 +76,9 @@ public class LearningDaysController
 
 	@RequestMapping(method = RequestMethod.POST)
 	public Long newLearningDay(HttpServletRequest request, @RequestBody NewLearningDayModel model) throws Exception {
-//		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
-//		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
-		long id = 1;
-		Optional<Employee> employee = employeeService.findById(id);
-
-		if (employee.isPresent())
-		{
-			return learningDayService.Insert(employee.get(), model.subjectId, model.date);
-		}
-		return 1L;
+		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
+		return learningDayService.Insert(employee, model.subjectId, model.date);
 	}
 
 	@RequestMapping(value = "/addNotes", method = RequestMethod.POST)

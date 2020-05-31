@@ -40,17 +40,13 @@ public class LimitController
 	@RequestMapping(method = RequestMethod.GET)
 	public LimitModel getLimit(HttpServletRequest request) throws Exception
 	{
-		//String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
-		//Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
-		long id = 1;
-		Optional<Employee> employee = employeeService.findById(id);
-		if(employee.isPresent()){
-			LimitModel result = new LimitModel(employee.get().getLimit());
-			result.employeeId = employee.get().getId();
-			result.isBoss = employee.get().getTeam() == null;
-			return result;
-		}
-		return null;
+		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
+
+		LimitModel result = new LimitModel(employee.getLimit());
+		result.employeeId = employee.getId();
+		result.isBoss = employee.getTeam() == null;
+		return result;
 	}
 
 	@RequestMapping(value = "/global", method = RequestMethod.GET)
@@ -62,16 +58,10 @@ public class LimitController
 
 	@RequestMapping(value = "/staffers", method = RequestMethod.GET)
 	public List<StaffersLimits> getStaffersLimits(HttpServletRequest request) throws Exception {
-//		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
-//		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
-		long id = 1;
-		Optional<Employee> employee = employeeService.findById(id);
+		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
 
-		if (employee.isPresent())
-		{
-			List<Employee> employees = employeeService.findByManager(employee.get());
-			return employees.stream().map(StaffersLimits::new).collect(Collectors.toList());
-		}
-		return new ArrayList<StaffersLimits>();
+		List<Employee> employees = employeeService.findByManager(employee);
+		return employees.stream().map(StaffersLimits::new).collect(Collectors.toList());
 	}
 }
