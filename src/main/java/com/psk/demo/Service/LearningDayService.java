@@ -2,15 +2,20 @@ package com.psk.demo.Service;
 
 import com.psk.demo.Entity.Employee;
 import com.psk.demo.Entity.LearningDay;
+import com.psk.demo.Entity.Subject;
 import com.psk.demo.Entity.Team;
+import com.psk.demo.Helper.DateHelper;
 import com.psk.demo.Repository.IEmployeeRepository;
 import com.psk.demo.Repository.ILearningDayRepository;
+import com.psk.demo.Repository.ISubjectRepository;
 import com.psk.demo.Repository.ITeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LearningDayService implements ILearningDayService {
@@ -21,11 +26,14 @@ public class LearningDayService implements ILearningDayService {
     private IEmployeeRepository employeeRepository;
     @Autowired
     private ITeamRepository teamRepository;
+    @Autowired
+    private ISubjectRepository subjectRepository;
 
-    public LearningDayService(ILearningDayRepository learningDayRepository, IEmployeeRepository employeeRepository, ITeamRepository teamRepository) {
+    public LearningDayService(ILearningDayRepository learningDayRepository, IEmployeeRepository employeeRepository, ITeamRepository teamRepository, ISubjectRepository subjectRepository) {
         this.learningDayRepository = learningDayRepository;
         this.employeeRepository = employeeRepository;
         this.teamRepository = teamRepository;
+        this.subjectRepository = subjectRepository;
     }
 
     @Override
@@ -46,5 +54,24 @@ public class LearningDayService implements ILearningDayService {
     @Override
     public void delete(Long id) {
         learningDayRepository.deleteById(id);
+    }
+
+    @Override
+    public Long Insert(Employee employee, Long subjectId, String date) throws Exception {
+        Optional<Subject> subject = subjectRepository.findById(subjectId);
+        String formattedCurrentDate = DateHelper.formatDate(new Date());
+        LearningDay newLearningDay = new LearningDay(subject.get(), employee, date, null, formattedCurrentDate);
+        LearningDay createdLearningDay = learningDayRepository.save(newLearningDay);
+        return createdLearningDay.getId();
+    }
+
+    @Override
+    public void Save(LearningDay learningDay) {
+        learningDayRepository.save(learningDay);
+    }
+
+    @Override
+    public LearningDay findById(Long id) {
+        return learningDayRepository.findById(id).get();
     }
 }

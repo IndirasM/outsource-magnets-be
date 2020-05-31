@@ -9,4 +9,7 @@ public interface ILearningDayService {
     List<LearningDay> findByEmployee(Employee employee);
     List<LearningDay> findByManager(Employee manager);
     void delete(Long id);
+    Long Insert(Employee employee, Long subjectId, String date) throws Exception;
+    void Save(LearningDay learningDay);
+    LearningDay findById(Long id);
 }

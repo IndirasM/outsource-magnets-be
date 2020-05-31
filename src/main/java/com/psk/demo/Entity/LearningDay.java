@@ -24,6 +24,17 @@ public class LearningDay {
 
     private String created;
 
+    public LearningDay() {}
+
+    public LearningDay(Subject subject, Employee employee, String date, String notes, String created)
+    {
+        this.subject = subject;
+        this.employee = employee;
+        this.date = date;
+        this.notes = notes;
+        this.created = created;
+    }
+
     public Long getId() {
         return this.learningDayId;
     }

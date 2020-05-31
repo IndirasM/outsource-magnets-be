@@ -46,6 +46,7 @@ public class LimitController
 		Optional<Employee> employee = employeeService.findById(id);
 		if(employee.isPresent()){
 			LimitModel result = new LimitModel(employee.get().getLimit());
+			result.employeeId = employee.get().getId();
 			result.isBoss = employee.get().getTeam() == null;
 			return result;
 		}

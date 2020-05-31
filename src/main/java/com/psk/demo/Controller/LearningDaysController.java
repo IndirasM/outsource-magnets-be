@@ -2,16 +2,16 @@ package com.psk.demo.Controller;
 
 import com.psk.demo.Controller.Model.EmployeeLearningDayModel;
 import com.psk.demo.Controller.Model.LearningDayModel;
+import com.psk.demo.Controller.Model.LearningDayNotesModel;
+import com.psk.demo.Controller.Model.NewLearningDayModel;
 import com.psk.demo.Entity.Employee;
 import com.psk.demo.Entity.LearningDay;
+import com.psk.demo.Entity.Subject;
 import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.IEmployeeService;
 import com.psk.demo.Service.ILearningDayService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -76,5 +76,26 @@ public class LearningDaysController
 	{
 		Long parsedId = Long.parseLong(id, 10);
 		learningDayService.delete(parsedId);
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public Long newLearningDay(HttpServletRequest request, @RequestBody NewLearningDayModel model) throws Exception {
+//		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+//		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
+		long id = 1;
+		Optional<Employee> employee = employeeService.findById(id);
+
+		if (employee.isPresent())
+		{
+			return learningDayService.Insert(employee.get(), model.subjectId, model.date);
+		}
+		return 1L;
+	}
+
+	@RequestMapping(value = "/addNotes", method = RequestMethod.POST)
+	public void addNotes(@RequestBody LearningDayNotesModel model) throws Exception {
+		LearningDay ld = learningDayService.findById(model.learningDayId);
+		ld.setNotes(model.notes);
+		learningDayService.Save(ld);
 	}
 }
