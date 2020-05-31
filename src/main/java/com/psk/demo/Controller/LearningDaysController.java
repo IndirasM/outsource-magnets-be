@@ -36,21 +36,15 @@ public class LearningDaysController
 
 	@RequestMapping(method = RequestMethod.GET)
 	public List<LearningDayModel> getUserLearningDays(HttpServletRequest request) throws Exception {
-//		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
-//		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
-		long id = 1;
-		Optional<Employee> employee = employeeService.findById(id);
+		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
 
-		if (employee.isPresent())
-		{
-			List<LearningDay> learningDays = learningDayService.findByEmployee(employee.get());
-			List<LearningDayModel> result = learningDays.stream()
-					.map(LearningDayModel::new)
-					.collect(Collectors.toList());
+		List<LearningDay> learningDays = learningDayService.findByEmployee(employee);
+		List<LearningDayModel> result = learningDays.stream()
+				.map(LearningDayModel::new)
+				.collect(Collectors.toList());
 
-			return result;
-		}
-		return new ArrayList<LearningDayModel>();
+		return result;
 	}
 
 	@RequestMapping(value = "/staffers", method = RequestMethod.GET)
