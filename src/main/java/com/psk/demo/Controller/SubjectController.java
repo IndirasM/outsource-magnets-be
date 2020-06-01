@@ -2,15 +2,12 @@ package com.psk.demo.Controller;
 
 import com.psk.demo.Controller.Model.SubjectModel;
 import com.psk.demo.Controller.Model.SubjectsByTeamModel;
-import com.psk.demo.Entity.Employee;
 import com.psk.demo.Entity.LearningDay;
 import com.psk.demo.Entity.Subject;
-import com.psk.demo.Entity.Team;
 import com.psk.demo.Exception.ResourceNotFoundException;
-import com.psk.demo.Service.IEmployeeService;
 import com.psk.demo.Service.ILearningDayService;
 import com.psk.demo.Service.ISubjectService;
-import com.psk.demo.Service.ITeamService;
+import com.psk.demo.Service.IEmployeeSubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +25,6 @@ public class SubjectController
 {
 	@Autowired
 	private ISubjectService subjectService;
-	@Autowired
-	private ITeamService teamService;
 	@Autowired
 	private ILearningDayService learningDayService;
 

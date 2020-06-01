@@ -19,12 +19,7 @@ public class TeamService implements ITeamService {
 	}
 
 	@Override
-	public List<Team> findByTeamManager(Employee manager) {
-		return teamRepository.findByManager(manager);
-	}
-
-	@Override
-	public Optional<Team> findById(Long id) {
-		return teamRepository.findById(id);
+	public List<Team> findAll() {
+		return teamRepository.findAll();
 	}
 }

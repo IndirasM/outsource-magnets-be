@@ -20,6 +20,14 @@ public class EmployeeSubject {
 
     private String created;
 
+    public EmployeeSubject() {}
+
+    public EmployeeSubject(Subject subject, Employee employee, String created) {
+        this.subject = subject;
+        this.employee = employee;
+        this.created = created;
+    }
+
     public Long getId() {
         return this.employeeSubjectId;
     }
