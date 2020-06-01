@@ -1,5 +1,6 @@
 package com.psk.demo.Controller;
 
+import com.psk.demo.Controller.Model.NewSubjectModel;
 import com.psk.demo.Controller.Model.SubjectModel;
 import com.psk.demo.Controller.Model.SubjectsByTeamModel;
 import com.psk.demo.Entity.Employee;
@@ -12,11 +13,10 @@ import com.psk.demo.Service.ILearningDayService;
 import com.psk.demo.Service.ISubjectService;
 import com.psk.demo.Service.ITeamService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -77,5 +77,10 @@ public class SubjectController
 			return new SubjectsByTeamModel(subject.getId(), subject.getName(), employeeNames);
 		}).collect(Collectors.toList());
 		return result;
+	}
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public void createSubject(@RequestBody NewSubjectModel subject) throws Exception {
+		subjectService.Insert(subject);
 	}
 }
