@@ -1,5 +1,6 @@
 package com.psk.demo.Service;
 
+import com.psk.demo.Controller.Model.NewSubjectModel;
 import com.psk.demo.Entity.Employee;
 import com.psk.demo.Entity.LearningDay;
 import com.psk.demo.Entity.Subject;
@@ -43,5 +44,19 @@ public class SubjectService implements ISubjectService {
 	@Override
 	public Optional<Subject> findById(Long id) {
 		return subjectRepository.findById(id);
+	}
+
+	@Override
+	public Long Insert(NewSubjectModel subject) {
+		System.out.println(subject.name);
+		Subject newSubject = new Subject();
+		newSubject.setDescription(subject.description);
+		newSubject.setName(subject.name);
+		newSubject.setDate(new Date().toString());
+		if (subject.parentId != null) {
+			newSubject.setParentSubject(subjectRepository.getOne(subject.parentId));
+		}
+		Subject createdSubject = subjectRepository.save(newSubject);
+		return createdSubject.getId();
 	}
 }
