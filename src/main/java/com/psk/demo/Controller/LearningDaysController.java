@@ -11,6 +11,8 @@ import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.IEmployeeService;
 import com.psk.demo.Service.ILearningDayService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,10 +71,19 @@ public class LearningDaysController
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public Long newLearningDay(HttpServletRequest request, @RequestBody NewLearningDayModel model) throws Exception {
+	public ResponseEntity<?> newLearningDay(HttpServletRequest request, @RequestBody NewLearningDayModel model) throws Exception {
 		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
 		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
-		return learningDayService.Insert(employee, model.subjectId, model.date);
+
+
+		ResponseEntity result;
+		if (learningDayService.limitValid(employee, model.date)) {
+			Long id = learningDayService.Insert(employee, model.subjectId, model.date);
+			result = new ResponseEntity(id, HttpStatus.OK);
+		} else {
+			result = new ResponseEntity(HttpStatus.UNAUTHORIZED);
+		}
+		return result;
 	}
 
 	@RequestMapping(value = "/addNotes", method = RequestMethod.POST)

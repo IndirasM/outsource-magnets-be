@@ -9,4 +9,7 @@ import java.util.List;
 public interface ILearningDayRepository extends JpaRepository<LearningDay, Long> {
     List<LearningDay> findByEmployee(Employee employee);
     List<LearningDay> findByEmployeeIn(List<Employee> employees);
+    List<LearningDay> findByDateIn(List<String> dates);
+    List<LearningDay> findByDateAndEmployee(String date, Employee employee);
+    List<LearningDay> findByEmployeeAndDateGreaterThanEqualAndDateLessThan(Employee employee, String date1, String date2);
 }

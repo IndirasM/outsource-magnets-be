@@ -3,6 +3,7 @@ package com.psk.demo.Service;
 import com.psk.demo.Entity.Employee;
 import com.psk.demo.Entity.LearningDay;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface ILearningDayService {
@@ -14,4 +15,5 @@ public interface ILearningDayService {
     LearningDay findById(Long id);
     List<LearningDay> findAllLearnedByTeamId(Long id);
     List<LearningDay> findAllToLearnByTeamId(Long id);
+    boolean limitValid(Employee employee, String formattedDate) throws ParseException;
 }

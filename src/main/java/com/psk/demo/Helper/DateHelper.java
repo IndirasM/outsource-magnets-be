@@ -1,6 +1,7 @@
 package com.psk.demo.Helper;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -28,5 +29,9 @@ public class DateHelper {
 			isValid = false;
 		}
 		return isValid;
+	}
+
+	public static Date getDate(String formattedDate) throws ParseException {
+		return new SimpleDateFormat("yyyy-MM-dd").parse(formattedDate);
 	}
 }

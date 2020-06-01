@@ -10,12 +10,11 @@ import com.psk.demo.Repository.ILearningDayRepository;
 import com.psk.demo.Repository.ISubjectRepository;
 import com.psk.demo.Repository.ITeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.text.ParseException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -98,5 +97,95 @@ public class LearningDayService implements ILearningDayService {
                 .filter(d -> formattedDate.compareTo(d.getDate()) <= 0)
                 .collect(Collectors.toList());
         return filteredDays;
+    }
+
+    public boolean limitValid(Employee employee, String formattedDate) throws ParseException {
+        boolean pastDayValid = pastDayValid(formattedDate);
+        boolean sameDayValid = sameDayValid(employee, formattedDate);
+        boolean rowValid = rowLimitValid(employee, formattedDate);
+        boolean monthValid = monthLimitValid(employee, formattedDate);
+        boolean yearValid = yearLimitValid(employee, formattedDate);
+
+        return pastDayValid && sameDayValid && rowValid && monthValid && yearValid;
+    }
+
+    private boolean pastDayValid(String formattedDate) {
+        String today = DateHelper.formatDate(new Date());
+        return today.compareTo(formattedDate) < 0;
+    }
+
+    private boolean sameDayValid(Employee employee, String formattedDate) {
+        List<LearningDay> lds = learningDayRepository.findByDateAndEmployee(formattedDate, employee);
+        return lds.isEmpty();
+    }
+
+    private boolean rowLimitValid(Employee employee, String formattedDate) throws ParseException {
+        int rowLimit = employee.getLimit().getDaysInRow();
+        Date date = DateHelper.getDate(formattedDate);
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int i;
+        for (i = 0; i < rowLimit; i++) {
+            c.add(Calendar.DATE, -1);
+            String d = DateHelper.formatDate(c.getTime());
+            List<LearningDay> ld = learningDayRepository.findByDateAndEmployee(d, employee);
+            if (ld.size() == 0){
+                break;
+            }
+        }
+
+        if (i == rowLimit)
+            return false;
+
+        c.setTime(date);
+        for (; i < rowLimit; i++) {
+            c.add(Calendar.DATE, 1);
+            String d = DateHelper.formatDate(c.getTime());
+            List<LearningDay> ld = learningDayRepository.findByDateAndEmployee(d, employee);
+            if (ld.size() == 0){
+                break;
+            }
+        }
+
+        return i != rowLimit;
+    }
+
+    private boolean monthLimitValid(Employee employee, String formattedDate) throws ParseException {
+        int monthLimit = employee.getLimit().getDaysInMonth();
+        Date date = DateHelper.getDate(formattedDate);
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        String firstDayDate = DateHelper.formatDate(c.getTime());
+
+        c.add(Calendar.MONTH, 1);
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        String lastDayDate = DateHelper.formatDate(c.getTime());
+
+        List<LearningDay> lds = learningDayRepository
+                .findByEmployeeAndDateGreaterThanEqualAndDateLessThan(employee, firstDayDate, lastDayDate);
+
+        return lds.size() < monthLimit;
+    }
+
+    private boolean yearLimitValid(Employee employee, String formattedDate) throws ParseException {
+        int yearLimit = employee.getLimit().getDaysInYear();
+        Date date = DateHelper.getDate(formattedDate);
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.MONTH, 0);
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        String firstDayDate = DateHelper.formatDate(c.getTime());
+
+        c.add(Calendar.YEAR, 1);
+        String lastDayDate = DateHelper.formatDate(c.getTime());
+
+        List<LearningDay> lds = learningDayRepository
+                .findByEmployeeAndDateGreaterThanEqualAndDateLessThan(employee, firstDayDate, lastDayDate);
+
+        return lds.size() < yearLimit;
     }
 }
