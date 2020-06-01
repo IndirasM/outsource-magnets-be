@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LearningDayService implements ILearningDayService {
@@ -73,5 +74,29 @@ public class LearningDayService implements ILearningDayService {
     @Override
     public LearningDay findById(Long id) {
         return learningDayRepository.findById(id).get();
+    }
+
+    @Override
+    public List<LearningDay> findAllLearnedByTeamId(Long id) {
+        Team team = teamRepository.findById(id).get();
+        List<Employee> employees = employeeRepository.findByTeam(team);
+        List<LearningDay> learningDays = learningDayRepository.findByEmployeeIn(employees);
+        String formattedDate = DateHelper.formatDate(new Date());
+        List<LearningDay> filteredDays = learningDays.stream()
+                .filter(d -> formattedDate.compareTo(d.getDate()) > 0)
+                .collect(Collectors.toList());
+        return filteredDays;
+    }
+
+    @Override
+    public List<LearningDay> findAllToLearnByTeamId(Long id) {
+        Team team = teamRepository.findById(id).get();
+        List<Employee> employees = employeeRepository.findByTeam(team);
+        List<LearningDay> learningDays = learningDayRepository.findByEmployeeIn(employees);
+        String formattedDate = DateHelper.formatDate(new Date());
+        List<LearningDay> filteredDays = learningDays.stream()
+                .filter(d -> formattedDate.compareTo(d.getDate()) <= 0)
+                .collect(Collectors.toList());
+        return filteredDays;
     }
 }

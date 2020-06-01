@@ -12,4 +12,6 @@ public interface ILearningDayService {
     Long Insert(Employee employee, Long subjectId, String date) throws Exception;
     void Save(LearningDay learningDay);
     LearningDay findById(Long id);
+    List<LearningDay> findAllLearnedByTeamId(Long id);
+    List<LearningDay> findAllToLearnByTeamId(Long id);
 }

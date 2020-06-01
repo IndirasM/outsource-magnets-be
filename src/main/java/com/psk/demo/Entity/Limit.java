@@ -22,6 +22,13 @@ public class Limit {
     @Column(name = "days_in_row")
     private int daysInRow;
 
+    public Limit() {}
+
+    public Limit(int daysInYear, int daysInMonth, int daysInRow){
+        this.daysInYear = daysInYear;
+        this.daysInMonth = daysInMonth;
+        this.daysInRow = daysInRow;
+    }
     public Long getId() {
         return this.limitId;
     }

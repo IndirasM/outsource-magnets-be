@@ -1,5 +1,6 @@
 package com.psk.demo.Repository;
 
+import com.psk.demo.Entity.Limit;
 import com.psk.demo.Entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,4 +13,6 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
 	List<Employee> findByNameStartingWith(String fragment);
 	List<Employee> findByTeam(Team team);
 	List<Employee> findByTeamIn(List<Team> team);
+	List<Employee> findByLimit(Limit limit);
+	List<Employee> findByLimitIn(List<Limit> limit);
 }

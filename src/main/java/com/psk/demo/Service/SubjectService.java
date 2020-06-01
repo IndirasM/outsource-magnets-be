@@ -1,20 +1,38 @@
 package com.psk.demo.Service;
 
+import com.psk.demo.Entity.Employee;
+import com.psk.demo.Entity.LearningDay;
 import com.psk.demo.Entity.Subject;
+import com.psk.demo.Entity.Team;
+import com.psk.demo.Helper.DateHelper;
+import com.psk.demo.Repository.IEmployeeRepository;
+import com.psk.demo.Repository.ILearningDayRepository;
 import com.psk.demo.Repository.ISubjectRepository;
+import com.psk.demo.Repository.ITeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SubjectService implements ISubjectService {
 	@Autowired
 	private ISubjectRepository subjectRepository;
+	@Autowired
+	private IEmployeeRepository employeeRepository;
+	@Autowired
+	private ITeamRepository teamRepository;
+	@Autowired
+	private ILearningDayRepository learningDayRepository;
 
-	public SubjectService(ISubjectRepository subjectRepository) {
+	public SubjectService(ISubjectRepository subjectRepository, IEmployeeRepository employeeRepository, ITeamRepository teamRepository, ILearningDayRepository learningDayRepository) {
 		this.subjectRepository = subjectRepository;
+		this.employeeRepository = employeeRepository;
+		this.teamRepository = teamRepository;
+		this.learningDayRepository = learningDayRepository;
 	}
 
 	@Override
