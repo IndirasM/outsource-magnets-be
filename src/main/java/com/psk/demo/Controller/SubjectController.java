@@ -8,14 +8,12 @@ import com.psk.demo.Entity.Employee;
 import com.psk.demo.Entity.LearningDay;
 import com.psk.demo.Entity.Subject;
 import com.psk.demo.Exception.ResourceNotFoundException;
-import com.psk.demo.Repository.IEmployeeSubjectRepository;
 import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.IEmployeeService;
+import com.psk.demo.Service.IEmployeeSubjectService;
 import com.psk.demo.Service.ILearningDayService;
 import com.psk.demo.Service.ISubjectService;
-import com.psk.demo.Service.IEmployeeSubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;

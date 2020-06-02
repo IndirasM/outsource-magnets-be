@@ -14,9 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.psk.demo.Security.SecurityConstants.TOKEN_PREFIX;
@@ -99,5 +98,23 @@ public class LearningDaysController
 
 		return learningDayService.findBySubject(subject).stream()
 				.map(LearningDayEmployeeModel::new).collect(Collectors.toList());
+	}
+
+	@RequestMapping(value = "/edit/{id:[0-9]+}", method = RequestMethod.POST)
+	public ResponseEntity<?> edit(@PathVariable String id, @RequestBody LearningDayEditModel model) throws ParseException {
+		Long parsedId = Long.parseLong(id, 10);
+		LearningDay ld = learningDayService.findById(parsedId);
+		Subject subject = subjectService.findById(model.subjectId).get();
+		ld.setSubject(subject);
+		ld.setDate(model.date);
+
+		ResponseEntity result;
+		if (learningDayService.limitValid(ld.getEmployee(), model.date)) {
+			learningDayService.Save(ld);
+			result = new ResponseEntity(HttpStatus.OK);
+		} else {
+			result = new ResponseEntity(HttpStatus.UNAUTHORIZED);
+		}
+		return result;
 	}
 }

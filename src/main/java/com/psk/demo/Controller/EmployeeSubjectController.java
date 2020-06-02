@@ -1,11 +1,6 @@
 package com.psk.demo.Controller;
 
 import com.psk.demo.Controller.Model.AddSuggestedSubjectModel;
-import com.psk.demo.Controller.Model.SubjectModel;
-import com.psk.demo.Entity.Subject;
-import com.psk.demo.Exception.ResourceNotFoundException;
-import com.psk.demo.Service.ILearningDayService;
-import com.psk.demo.Service.ISubjectService;
 import com.psk.demo.Service.IEmployeeSubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
