@@ -79,7 +79,7 @@ public class LearningDaysController
 			Long id = learningDayService.Insert(employee, model.subjectId, model.date);
 			result = new ResponseEntity(id, HttpStatus.OK);
 		} else {
-			result = new ResponseEntity(HttpStatus.UNAUTHORIZED);
+			result = new ResponseEntity(HttpStatus.BAD_REQUEST);
 		}
 		return result;
 	}
