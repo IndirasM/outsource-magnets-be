@@ -1,14 +1,8 @@
 package com.psk.demo.Service;
 
-import com.psk.demo.Entity.Employee;
-import com.psk.demo.Entity.EmployeeSubject;
-import com.psk.demo.Entity.Subject;
-import com.psk.demo.Entity.Team;
+import com.psk.demo.Entity.*;
 import com.psk.demo.Helper.DateHelper;
-import com.psk.demo.Repository.IEmployeeRepository;
-import com.psk.demo.Repository.IEmployeeSubjectRepository;
-import com.psk.demo.Repository.ISubjectRepository;
-import com.psk.demo.Repository.ITeamRepository;
+import com.psk.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +19,14 @@ public class EmployeeSubjectService implements IEmployeeSubjectService {
 	private IEmployeeRepository employeeRepository;
 	@Autowired
 	private ISubjectRepository subjectRepository;
+	@Autowired
+	private ILearningDayRepository learningDayRepository;
 
-	public EmployeeSubjectService(IEmployeeSubjectRepository employeeSubjectRepository, IEmployeeRepository employeeRepository, ISubjectRepository subjectRepository) {
+	public EmployeeSubjectService(IEmployeeSubjectRepository employeeSubjectRepository, IEmployeeRepository employeeRepository, ISubjectRepository subjectRepository, ILearningDayRepository learningDayRepository) {
 		this.employeeSubjectRepository = employeeSubjectRepository;
 		this.employeeRepository = employeeRepository;
 		this.subjectRepository = subjectRepository;
+		this.learningDayRepository = learningDayRepository;
 	}
 
 	@Override
@@ -41,5 +38,23 @@ public class EmployeeSubjectService implements IEmployeeSubjectService {
 		}).collect(Collectors.toList());
 
 		employeeSubjectRepository.saveAll(employeeSubjects);
+	}
+
+	@Override
+	public List<EmployeeSubject> findByEmployeeId(Employee employee) {
+		List<EmployeeSubject> allES = employeeSubjectRepository.findByEmployee(employee);
+		List<Subject> esSubjects = allES.stream().map(EmployeeSubject::getSubject).collect(Collectors.toList());
+		List<LearningDay> learningDaysBySubjects = learningDayRepository.findByEmployeeAndSubjectIn(employee, esSubjects);
+		List<Long> learningDaySubjects = learningDaysBySubjects.stream().map(ld -> ld.getSubject().getId()).collect(Collectors.toList());
+
+		List<EmployeeSubject> filteredEs = allES.stream().filter(es -> {
+			List<LearningDay> f = learningDaysBySubjects.stream()
+					.filter(ld -> ld.getSubject().getId() == es.getSubject().getId() && es.getCreated().compareTo(ld.getCreated()) <= 0)
+					.collect(Collectors.toList());
+
+			return f.isEmpty();
+		}).collect(Collectors.toList());
+
+		return filteredEs;
 	}
 }

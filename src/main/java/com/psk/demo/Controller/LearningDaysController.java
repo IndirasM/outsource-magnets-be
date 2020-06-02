@@ -1,15 +1,13 @@
 package com.psk.demo.Controller;
 
-import com.psk.demo.Controller.Model.EmployeeLearningDayModel;
-import com.psk.demo.Controller.Model.LearningDayModel;
-import com.psk.demo.Controller.Model.LearningDayNotesModel;
-import com.psk.demo.Controller.Model.NewLearningDayModel;
+import com.psk.demo.Controller.Model.*;
 import com.psk.demo.Entity.Employee;
 import com.psk.demo.Entity.LearningDay;
 import com.psk.demo.Entity.Subject;
 import com.psk.demo.Security.TokenUtil;
 import com.psk.demo.Service.IEmployeeService;
 import com.psk.demo.Service.ILearningDayService;
+import com.psk.demo.Service.ISubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +27,13 @@ public class LearningDaysController
 {
 	@Autowired
 	private IEmployeeService employeeService;
-
 	@Autowired
 	private ILearningDayService learningDayService;
-
 	@Autowired
 	private TokenUtil tokenUtil;
+	@Autowired
+	private ISubjectService subjectService;
+
 
 	@RequestMapping(method = RequestMethod.GET)
 	public List<LearningDayModel> getUserLearningDays(HttpServletRequest request) throws Exception {
@@ -50,7 +49,7 @@ public class LearningDaysController
 	}
 
 	@RequestMapping(value = "/staffers", method = RequestMethod.GET)
-	public List<EmployeeLearningDayModel> getStaffersLearningDays(HttpServletRequest request) throws Exception {
+	public List<EmployeeLearningDayModel> getStaffersLearningDays(HttpServletRequest request) {
 		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
 		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
 
@@ -91,5 +90,14 @@ public class LearningDaysController
 		LearningDay ld = learningDayService.findById(model.learningDayId);
 		ld.setNotes(model.notes);
 		learningDayService.Save(ld);
+	}
+
+	@RequestMapping(value = "/bySubjectId/{id:[0-9]+}", method = RequestMethod.GET)
+	public List<LearningDayEmployeeModel> getBySubjectId(@PathVariable String id) {
+		Long parsedId = Long.parseLong(id, 10);
+		Subject subject = subjectService.findById(parsedId).get();
+
+		return learningDayService.findBySubject(subject).stream()
+				.map(LearningDayEmployeeModel::new).collect(Collectors.toList());
 	}
 }

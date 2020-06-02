@@ -99,6 +99,12 @@ public class LearningDayService implements ILearningDayService {
         return filteredDays;
     }
 
+    @Override
+    public List<LearningDay> findBySubject(Subject subject) {
+        String formattedDate = DateHelper.formatDate(new Date());
+        return learningDayRepository.findBySubjectAndDateLessThan(subject, formattedDate);
+    }
+
     public boolean limitValid(Employee employee, String formattedDate) throws ParseException {
         boolean pastDayValid = pastDayValid(formattedDate);
         boolean sameDayValid = sameDayValid(employee, formattedDate);

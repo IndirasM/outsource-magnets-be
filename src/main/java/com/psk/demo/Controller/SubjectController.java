@@ -1,11 +1,16 @@
 package com.psk.demo.Controller;
 
+import com.psk.demo.Controller.Model.EmployeeSubjectModel;
 import com.psk.demo.Controller.Model.NewSubjectModel;
 import com.psk.demo.Controller.Model.SubjectModel;
 import com.psk.demo.Controller.Model.SubjectsByTeamModel;
+import com.psk.demo.Entity.Employee;
 import com.psk.demo.Entity.LearningDay;
 import com.psk.demo.Entity.Subject;
 import com.psk.demo.Exception.ResourceNotFoundException;
+import com.psk.demo.Repository.IEmployeeSubjectRepository;
+import com.psk.demo.Security.TokenUtil;
+import com.psk.demo.Service.IEmployeeService;
 import com.psk.demo.Service.ILearningDayService;
 import com.psk.demo.Service.ISubjectService;
 import com.psk.demo.Service.IEmployeeSubjectService;
@@ -19,6 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.psk.demo.Security.SecurityConstants.TOKEN_PREFIX;
+
 @RestController
 @RequestMapping("/api/subject")
 public class SubjectController
@@ -27,6 +34,12 @@ public class SubjectController
 	private ISubjectService subjectService;
 	@Autowired
 	private ILearningDayService learningDayService;
+	@Autowired
+	private IEmployeeSubjectService employeeSubjectService;
+	@Autowired
+	private IEmployeeService employeeService;
+	@Autowired
+	private TokenUtil tokenUtil;
 
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	public List<SubjectModel> getAllSubjects()
@@ -77,5 +90,14 @@ public class SubjectController
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public void createSubject(@RequestBody NewSubjectModel subject) throws Exception {
 		subjectService.Insert(subject);
+	}
+
+	@RequestMapping(value = "/allSuggestedSubjects", method = RequestMethod.GET)
+	public List<EmployeeSubjectModel> getAllSuggestedSubjects(HttpServletRequest request)
+	{
+		String token = request.getHeader("Authorization").replace(TOKEN_PREFIX, "");
+		Employee employee = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
+		return employeeSubjectService.findByEmployeeId(employee).stream()
+				.map(es -> new EmployeeSubjectModel(es.getSubject())).collect(Collectors.toList());
 	}
 }
