@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -50,12 +51,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
+
+		CorsConfiguration config = new CorsConfiguration();
+		config.applyPermitDefaultValues();
+		config.addAllowedOrigin("*");
+		config.addAllowedMethod("DELETE");
+
 		httpSecurity.csrf().disable()
 				.authorizeRequests().antMatchers("/api/user/authenticate").permitAll()
 				.anyRequest().authenticated().and()
 				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-		.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+		.cors().configurationSource(request -> config);
 
 		httpSecurity.addFilterBefore(tokenRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
