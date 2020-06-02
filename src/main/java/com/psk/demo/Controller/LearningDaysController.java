@@ -113,7 +113,7 @@ public class LearningDaysController
 			learningDayService.Save(ld);
 			result = new ResponseEntity(HttpStatus.OK);
 		} else {
-			result = new ResponseEntity(HttpStatus.UNAUTHORIZED);
+			result = new ResponseEntity(HttpStatus.BAD_REQUEST);
 		}
 		return result;
 	}
