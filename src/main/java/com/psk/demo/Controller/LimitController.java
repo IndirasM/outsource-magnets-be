@@ -82,8 +82,11 @@ public class LimitController
 		Employee manager = employeeService.findByEmail(tokenUtil.getUsernameFromToken(token));
 		Employee employee = employeeService.findById(model.employeeId).get();
 
+		boolean settingByManager = false;
 		boolean bossSettingOwn = manager.getTeam() == null && manager.getId() == model.employeeId;
-		boolean settingByManager =  employee.getTeam().getManager().getId() == manager.getId();
+		if (!bossSettingOwn) {
+			settingByManager =  employee.getTeam().getManager().getId() == manager.getId();
+		}
 
 		if (!(bossSettingOwn || settingByManager))
 		{
